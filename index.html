@@ -809,23 +809,6 @@
             setTimeout(() => msg.classList.add('hidden'), 3000);
         }
 
-        // Actualizar hints según la plataforma seleccionada
-        document.getElementById('adPlatform').addEventListener('change', function() {
-            const platform = this.value;
-            const hints = {
-                'none': 'No se mostrará publicidad en tu tarjeta',
-                'adsense': '📌 <strong>Google AdSense:</strong> Ve a tu cuenta > Anuncios > Unidades de anuncios > Copia el código HTML completo',
-                'aads': '📌 <strong>A-Ads:</strong> Regístrate en a-ads.com > Crea un banner > Copia el código HTML. ¡Paga en Bitcoin!',
-                'adsterra': '📌 <strong>Adsterra:</strong> Regístrate en adsterra.com > Crea zona publicitaria > Copia el código de inserción',
-                'medianet': '📌 <strong>Media.net:</strong> Ve a tu dashboard > Ad Units > Copia el código JavaScript',
-                'ezoic': '📌 <strong>Ezoic:</strong> Copia el código de placeholder desde tu dashboard de Ezoic',
-                'coinzilla': '📌 <strong>Coinzilla:</strong> Regístrate en coinzilla.com > Crea banner crypto > Copia código. ¡Paga en crypto!',
-                'bitmedia': '📌 <strong>Bitmedia:</strong> Regístrate en bitmedia.io > Crea zona > Copia código. Paga en BTC/ETH'
-            };
-            
-            document.getElementById('adsHint').innerHTML = hints[platform] || hints['none'];
-        });
-
         // Procesar el formulario
         document.getElementById('songForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -837,7 +820,6 @@
                 artist: document.getElementById('artist').value,
                 description: document.getElementById('description').value,
                 audioUrl: document.getElementById('audioUrl').value,
-                adPlatform: document.getElementById('adPlatform').value,
                 adsCode: document.getElementById('adsCode').value
             };
 
@@ -993,7 +975,6 @@
                 a: cardData.artist,
                 d: cardData.description || '',
                 u: cardData.audioUrl,
-                p: cardData.adPlatform || 'none',
                 ads: cardData.adsCode || ''
             });
             
@@ -1129,7 +1110,6 @@
                     artist: params.get('a') || 'Artista desconocido',
                     description: params.get('d') || '',
                     audioUrl: params.get('u') || '',
-                    adPlatform: params.get('p') || 'none',
                     adsCode: params.get('ads') || ''
                 };
                 
