@@ -2,7 +2,12 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="description" content="Crea tarjetas musicales personalizadas con reproductor integrado y QR. Monetiza tu música con regalías directas.">
+    <meta name="theme-color" content="#667eea">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Regalías Directas - Crea tu Tarjeta Musical</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
@@ -17,11 +22,13 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
+            overflow-x: hidden; /* Evita scroll horizontal */
         }
 
         .container {
             max-width: 800px;
             margin: 0 auto;
+            width: 100%; /* Asegura que use todo el ancho disponible */
         }
 
         h1 {
@@ -125,6 +132,12 @@
             line-height: 1.5;
         }
 
+        /* Responsive multimedia */
+        iframe, audio, video {
+            max-width: 100%;
+            height: auto;
+        }
+
         .player-controls {
             display: flex;
             gap: 10px;
@@ -225,13 +238,164 @@
             justify-content: center;
         }
 
-        @media (max-width: 600px) {
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
             h1 {
                 font-size: 1.8em;
+                margin-bottom: 20px;
             }
-            
+
+            .container {
+                max-width: 100%;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .music-card {
+                padding: 20px;
+            }
+
+            .music-card h2 {
+                font-size: 1.5em;
+            }
+
+            .music-card .artist {
+                font-size: 1em;
+            }
+
+            .form-group {
+                margin-bottom: 15px;
+            }
+
+            input, textarea, select {
+                font-size: 16px; /* Evita zoom en iOS */
+            }
+
+            button {
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+
             .actions {
                 flex-direction: column;
+            }
+
+            .actions button {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .player-controls {
+                flex-direction: column;
+            }
+
+            .player-controls button {
+                margin-bottom: 8px;
+            }
+
+            .info-box {
+                padding: 12px;
+                font-size: 0.9em;
+            }
+
+            .info-box h3 {
+                font-size: 1.1em;
+            }
+
+            #qrcode {
+                padding: 10px;
+            }
+
+            #qrcode canvas, #qrcode img {
+                max-width: 100% !important;
+                height: auto !important;
+            }
+
+            .qr-container h2 {
+                font-size: 1.3em;
+            }
+
+            .ad-container {
+                min-height: 80px;
+                padding: 10px;
+            }
+
+            .developer-ad {
+                padding: 8px;
+                font-size: 0.8em;
+            }
+        }
+
+        /* Tablets */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .container {
+                max-width: 700px;
+            }
+
+            h1 {
+                font-size: 2.2em;
+            }
+
+            .card {
+                padding: 25px;
+            }
+
+            .music-card h2 {
+                font-size: 1.6em;
+            }
+        }
+
+        /* Móviles pequeños */
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5em;
+            }
+
+            .music-card h2 {
+                font-size: 1.3em;
+            }
+
+            .music-card .artist {
+                font-size: 0.9em;
+            }
+
+            .music-card .description {
+                font-size: 0.9em;
+            }
+
+            button {
+                font-size: 13px;
+                padding: 10px 15px;
+            }
+
+            .info-box p {
+                font-size: 0.85em;
+            }
+
+            iframe {
+                max-width: 100% !important;
+            }
+        }
+
+        /* Landscape mobile */
+        @media (max-height: 500px) and (orientation: landscape) {
+            h1 {
+                font-size: 1.5em;
+                margin-bottom: 15px;
+            }
+
+            .card {
+                padding: 15px;
+            }
+
+            .music-card {
+                padding: 15px;
             }
         }
     </style>
@@ -461,7 +625,7 @@
             if (url.includes('spotify.com')) {
                 const trackId = extractSpotifyId(url);
                 return `
-                    <iframe style="border-radius:12px; margin-bottom: 20px;" 
+                    <iframe style="border-radius:12px; margin-bottom: 20px; max-width: 100%;" 
                         src="https://open.spotify.com/embed/track/${trackId}" 
                         width="100%" height="152" frameBorder="0" 
                         allowfullscreen="" 
@@ -475,7 +639,7 @@
             if (url.includes('soundcloud.com')) {
                 return `
                     <iframe width="100%" height="166" scrolling="no" frameborder="no" 
-                        allow="autoplay" 
+                        allow="autoplay" style="max-width: 100%;"
                         src="https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&color=%23ff5500&auto_play=false&hide_related=false&show_comments=false&show_user=true&show_reposts=false&show_teaser=true">
                     </iframe>
                 `;
@@ -485,18 +649,20 @@
             if (url.includes('youtube.com') || url.includes('youtu.be')) {
                 const videoId = extractYouTubeId(url);
                 return `
-                    <iframe width="100%" height="200" 
-                        src="https://www.youtube.com/embed/${videoId}" 
-                        frameborder="0" 
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                        allowfullscreen style="border-radius: 12px; margin-bottom: 20px;">
-                    </iframe>
+                    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; margin-bottom: 20px;">
+                        <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 12px;"
+                            src="https://www.youtube.com/embed/${videoId}" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
                 `;
             }
             
             // Archivo MP3 directo (con controles nativos)
             return `
-                <audio id="audioPlayer" src="${url}" preload="metadata" controls style="width: 100%; margin-bottom: 20px; border-radius: 8px;">
+                <audio id="audioPlayer" src="${url}" preload="metadata" controls style="width: 100%; max-width: 100%; margin-bottom: 20px; border-radius: 8px;">
                     Tu navegador no soporta el elemento de audio.
                 </audio>
             `;
