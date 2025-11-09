@@ -1605,6 +1605,12 @@
             if (modal) {
                 modal.classList.add('active');
                 document.body.style.overflow = 'hidden';
+                
+                // Registrar que se mostró el modal
+                adModalState.timesShown++;
+                adModalState.dailyShows++;
+                adModalState.lastShownTime = Date.now();
+                saveAdModalState();
             }
         }
 
@@ -1616,16 +1622,97 @@
             }
         }
 
-        // Mostrar modal global automáticamente después de 5 segundos en cualquier pestaña
-        let globalAdModalShown = false;
-        setTimeout(() => {
-            if (!globalAdModalShown) {
-                openGlobalAdModal();
-                globalAdModalShown = true;
-            }
-        }, 5000);
+        // ⚙️ CONFIGURACIÓN DEL SISTEMA INTELIGENTE DE MODAL
+        const MODAL_CONFIG = {
+            FIRST_DELAY: 10000,           // Primera aparición: 10 segundos
+            MIN_INTERVAL: 90000,          // Mínimo 90 segundos entre modales
+            MAX_SHOWS_PER_SESSION: 4,    // Máximo 4 veces por sesión
+            TABS_BETWEEN_SHOWS: 3,       // Mostrar cada 3 cambios de pestaña
+            RESET_AFTER_HOURS: 24        // Resetear contador después de 24 horas
+        };
 
-        // Función para cambiar entre pestañas
+        // Estado del modal (se guarda en localStorage)
+        let adModalState = {
+            timesShown: 0,
+            lastShownTime: 0,
+            tabChanges: 0,
+            firstVisit: Date.now(),
+            dailyShows: 0,
+            lastResetDate: new Date().toDateString()
+        };
+
+        // Cargar estado desde localStorage
+        function loadAdModalState() {
+            const saved = localStorage.getItem('adModalState');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    const today = new Date().toDateString();
+                    
+                    // Resetear si es un nuevo día
+                    if (parsed.lastResetDate !== today) {
+                        adModalState.dailyShows = 0;
+                        adModalState.lastResetDate = today;
+                        adModalState.timesShown = 0;
+                    } else {
+                        adModalState = parsed;
+                    }
+                } catch (e) {
+                    console.log('Error cargando estado del modal:', e);
+                }
+            }
+        }
+
+        // Guardar estado en localStorage
+        function saveAdModalState() {
+            localStorage.setItem('adModalState', JSON.stringify(adModalState));
+        }
+
+        // Verificar si se puede mostrar el modal
+        function canShowModal() {
+            const now = Date.now();
+            const timeSinceLastShow = now - adModalState.lastShownTime;
+            
+            // Condiciones para NO mostrar:
+            if (adModalState.timesShown >= MODAL_CONFIG.MAX_SHOWS_PER_SESSION) {
+                console.log('📊 Modal: Límite de sesión alcanzado');
+                return false;
+            }
+            
+            if (timeSinceLastShow < MODAL_CONFIG.MIN_INTERVAL) {
+                console.log('📊 Modal: Esperando intervalo mínimo');
+                return false;
+            }
+            
+            if (adModalState.dailyShows >= MODAL_CONFIG.MAX_SHOWS_PER_SESSION * 2) {
+                console.log('📊 Modal: Límite diario alcanzado');
+                return false;
+            }
+            
+            return true;
+        }
+
+        // Intentar mostrar el modal
+        function tryShowModal() {
+            if (canShowModal()) {
+                openGlobalAdModal();
+                console.log('✅ Modal mostrado. Total sesión:', adModalState.timesShown);
+                return true;
+            }
+            return false;
+        }
+
+        // Cargar estado al iniciar
+        loadAdModalState();
+
+        // Primera aparición automática (10 segundos)
+        setTimeout(() => {
+            if (adModalState.timesShown === 0) {
+                tryShowModal();
+            }
+        }, MODAL_CONFIG.FIRST_DELAY);
+
+        // Función para cambiar entre pestañas (con sistema inteligente)
         function switchTab(tabName) {
             // Ocultar todas las pestañas
             document.querySelectorAll('.tab-content').forEach(tab => {
@@ -1646,13 +1733,20 @@
             // Scroll al inicio
             window.scrollTo({ top: 0, behavior: 'smooth' });
             
-            // Mostrar modal global después de cambiar de pestaña (opcional)
-            // Comentado para que solo aparezca una vez al cargar
-            /*
-            setTimeout(() => {
-                openGlobalAdModal();
-            }, 3000);
-            */
+            // Sistema inteligente: Contar cambios de pestaña
+            adModalState.tabChanges++;
+            
+            // Mostrar modal cada X cambios de pestaña
+            if (adModalState.tabChanges >= MODAL_CONFIG.TABS_BETWEEN_SHOWS) {
+                adModalState.tabChanges = 0; // Resetear contador
+                
+                // Intentar mostrar modal después de un pequeño delay
+                setTimeout(() => {
+                    tryShowModal();
+                }, 2000); // 2 segundos después de cambiar de pestaña
+            }
+            
+            saveAdModalState();
         }
 
         // Incrementar contador de vistas
