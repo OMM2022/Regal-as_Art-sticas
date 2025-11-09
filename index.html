@@ -609,8 +609,9 @@
 
             <!-- QR Code -->
             <div class="card qr-container">
-                <h2>Código QR para Compartir</h2>
-                <p>Escanea este código para ver la tarjeta</p>
+                <h2>📱 Código QR para Compartir</h2>
+                <p>Escanea este código para ver la tarjeta en cualquier dispositivo</p>
+                <p style="font-size: 0.9em; color: #666; margin-top: 5px;">💡 Tú también puedes compartir este QR con tus amigos</p>
                 <div id="qrcode"></div>
             </div>
         </div>
@@ -1180,6 +1181,9 @@
                 
                 // Generar la tarjeta
                 generateCard();
+                
+                // Generar QR para que el usuario pueda compartir también
+                generateQR();
                 
                 // Incrementar contador de vistas
                 incrementViewCount();
