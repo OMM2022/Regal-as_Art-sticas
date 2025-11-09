@@ -1677,7 +1677,31 @@
             if (modal) {
                 modal.classList.remove('active');
                 document.body.style.overflow = '';
+                
+                // Activar Popunder de Adsterra cuando el usuario cierra el modal
+                // Solo se activa una vez por sesión para no molestar
+                if (!sessionStorage.getItem('popunderShown')) {
+                    sessionStorage.setItem('popunderShown', 'true');
+                    // El script de popunder se carga dinámicamente
+                    triggerPopunder();
+                }
             }
+        }
+
+        // Función para activar el Popunder de Adsterra
+        function triggerPopunder() {
+            // Verificar que no se haya activado ya
+            if (window.popunderActivated) return;
+            window.popunderActivated = true;
+            
+            // Crear y cargar el script de Popunder
+            const script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = '//pl28021413.effectivegatecpm.com/1d/10/e5/1d10e55a751f630794821f867ea7fd84.js';
+            script.async = true;
+            document.head.appendChild(script);
+            
+            console.log('💰 Popunder de Adsterra activado');
         }
 
         // ⚙️ CONFIGURACIÓN DEL SISTEMA INTELIGENTE DE MODAL
@@ -2376,5 +2400,9 @@
             ⚖️ Este código está protegido por copyright. Ver <a href="https://github.com/OMM2022/regalias-artisticas/blob/main/LICENSE" target="_blank" style="color: #667eea; text-decoration: none;">LICENSE</a> para términos de uso.
         </p>
     </footer>
+
+    <!-- Popunder Adsterra - Se activa con interacción del usuario -->
+    <script type='text/javascript' src='//pl28021413.effectivegatecpm.com/1d/10/e5/1d10e55a751f630794821f867ea7fd84.js'></script>
+
 </body>
 </html>
