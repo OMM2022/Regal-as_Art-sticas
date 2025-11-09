@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regalías Directas - Crea tu Tarjeta Musical</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border 0.3s;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border 0.3s;
+            background: white;
+            cursor: pointer;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .music-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 15px;
+            padding: 25px;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .music-card h2 {
+            margin-bottom: 10px;
+            font-size: 1.8em;
+        }
+
+        .music-card .artist {
+            opacity: 0.9;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .music-card .description {
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .player-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .player-controls button {
+            flex: 1;
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        .ad-container {
+            background: rgba(255,255,255,0.2);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ad-placeholder {
+            color: rgba(255,255,255,0.7);
+            font-style: italic;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .actions button {
+            flex: 1;
+        }
+
+        .qr-container {
+            text-align: center;
+            padding: 20px;
+        }
+
+        #qrcode {
+            display: inline-block;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .success-message {
+            background: #4caf50;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .info-box h3 {
+            color: #1976d2;
+            margin-bottom: 8px;
+        }
+
+        .info-box p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 5px;
+        }
+
+        .developer-ad {
+            background: rgba(0,0,0,0.1);
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 15px;
+            text-align: center;
+            font-size: 0.85em;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .developer-ad-content {
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎵 Regalías Directas</h1>
+
+        <!-- Formulario -->
+        <div id="formSection" class="card">
+            <div class="info-box">
+                <h3>📝 Instrucciones</h3>
+                <p>1. Sube tu canción a <strong>Spotify, SoundCloud, YouTube</strong> o cualquier servicio y copia el enlace</p>
+                <p>2. Rellena los datos de tu canción</p>
+                <p>3. Elige tu plataforma publicitaria y pega el código de inserción para monetizar</p>
+                <p>4. Genera tu tarjeta y comparte el QR</p>
+                <p><strong>💡 Plataformas de audio compatibles:</strong></p>
+                <p style="margin-left: 15px;">
+                    • <strong>Spotify:</strong> Copia el enlace de tu canción<br>
+                    • <strong>SoundCloud:</strong> Copia el enlace de tu track<br>
+                    • <strong>YouTube:</strong> Copia el enlace del video<br>
+                    • <strong>MP3 directo:</strong> URL directa a archivo .mp3
+                </p>
+                <p><strong>💰 Plataformas publicitarias recomendadas:</strong></p>
+                <p style="margin-left: 15px;">
+                    • <strong>Google AdSense:</strong> Estándar, alta monetización<br>
+                    • <strong>A-Ads:</strong> Pago en Bitcoin, sin registro previo<br>
+                    • <strong>Adsterra:</strong> Alternativa con buenos CPMs<br>
+                    • <strong>Coinzilla/Bitmedia:</strong> Para audiencia crypto
+                </p>
+            </div>
+
+            <form id="songForm">
+                <div class="form-group">
+                    <label>🎵 Nombre de la Canción *</label>
+                    <input type="text" id="songName" required placeholder="Ej: Mi Nueva Canción">
+                </div>
+
+                <div class="form-group">
+                    <label>🎤 Artista *</label>
+                    <input type="text" id="artist" required placeholder="Ej: Tu Nombre">
+                </div>
+
+                <div class="form-group">
+                    <label>📝 Descripción</label>
+                    <textarea id="description" placeholder="Describe tu canción..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>🔗 Enlace del Audio *</label>
+                    <input type="url" id="audioUrl" required placeholder="https://ejemplo.com/mi-cancion.mp3">
+                    <small style="color: #666; display: block; margin-top: 5px;">
+                        ✅ Soporta: Spotify, SoundCloud, YouTube, archivos MP3 directos
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label>💰 Plataforma Publicitaria</label>
+                    <select id="adPlatform">
+                        <option value="none">Sin publicidad</option>
+                        <option value="adsense">Google AdSense</option>
+                        <option value="aads">A-Ads (Bitcoin)</option>
+                        <option value="adsterra">Adsterra</option>
+                        <option value="medianet">Media.net</option>
+                        <option value="ezoic">Ezoic</option>
+                        <option value="coinzilla">Coinzilla (Crypto)</option>
+                        <option value="bitmedia">Bitmedia (Crypto)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label id="adsCodeLabel">💰 Código de Inserción Publicitario (Opcional)</label>
+                    <textarea id="adsCode" placeholder='Pega aquí el código de tu plataforma publicitaria (ej: <script>...</script> o <div>...</div>)'></textarea>
+                    <small id="adsHint" style="color: #666; display: block; margin-top: 5px;">
+                        ℹ️ <strong>Google AdSense:</strong> Pega tu código de anuncio completo<br>
+                        ℹ️ <strong>A-Ads:</strong> Pega el código HTML del banner<br>
+                        ℹ️ <strong>Adsterra:</strong> Pega el código de zona publicitaria<br>
+                        ℹ️ <strong>Otras:</strong> Pega el código que te proporcione tu plataforma
+                    </small>
+                </div>
+
+                <button type="submit">✨ Crear Tarjeta Musical</button>
+            </form>
+        </div>
+
+        <!-- Vista Previa de la Tarjeta -->
+        <div id="previewSection" class="hidden">
+            <div class="card">
+                <h2 style="margin-bottom: 20px; text-align: center;">Vista Previa de tu Tarjeta</h2>
+                <div id="musicCardPreview"></div>
+                
+                <div class="actions">
+                    <button onclick="copyEmbedCode()">📋 Copiar Código HTML</button>
+                    <button onclick="downloadQR()">📥 Descargar QR</button>
+                    <button onclick="reset()">🔄 Crear Nueva</button>
+                </div>
+            </div>
+
+            <!-- QR Code -->
+            <div class="card qr-container">
+                <h2>Código QR para Compartir</h2>
+                <p>Escanea este código para ver la tarjeta</p>
+                <div id="qrcode"></div>
+            </div>
+        </div>
+
+        <!-- Mensaje de éxito -->
+        <div id="successMessage" class="hidden success-message">
+            ✅ ¡Código copiado al portapapeles!
+        </div>
+    </div>
+
+    <script>
+        console.log('🎵 Script cargado correctamente'); // Debug inicial
+        
+        // ⚙️ CONFIGURACIÓN DEL DESARROLLADOR - TU MONETIZACIÓN
+        // Pega aquí tu código publicitario (Google AdSense, A-Ads, etc.)
+        const DEVELOPER_AD_CODE = `
+            <!-- Aquí va tu código publicitario -->
+            <div style="background: linear-gradient(45deg, #FFD700, #FFA500); padding: 15px; border-radius: 8px; color: #333;">
+                <p style="margin: 0; font-weight: bold;">💡 Espacio Publicitario del Desarrollador</p>
+                <p style="margin: 5px 0 0 0; font-size: 0.9em;">Reemplaza este contenido con tu código de AdSense, A-Ads, etc.</p>
+            </div>
+        `;
+        // Cambia "false" a "true" si quieres ocultar la publicidad durante pruebas
+        const HIDE_DEVELOPER_AD = false;
+        // ⚙️ FIN DE CONFIGURACIÓN
+        
+        // Verificar que QRCode esté disponible
+        window.addEventListener('load', function() {
+            if (typeof QRCode === 'undefined') {
+                console.error('⚠️ Librería QRCode no se cargó correctamente');
+                alert('Error: No se pudo cargar la librería de códigos QR. Por favor, recarga la página.');
+            } else {
+                console.log('✅ Librería QRCode cargada correctamente');
+            }
+        });
+        
+        let currentAudio = null;
+        let cardData = null;
+
+        // Actualizar hints según la plataforma seleccionada
+        document.getElementById('adPlatform').addEventListener('change', function() {
+            const platform = this.value;
+            const hints = {
+                'none': 'No se mostrará publicidad en tu tarjeta',
+                'adsense': '📌 <strong>Google AdSense:</strong> Ve a tu cuenta > Anuncios > Unidades de anuncios > Copia el código HTML completo',
+                'aads': '📌 <strong>A-Ads:</strong> Regístrate en a-ads.com > Crea un banner > Copia el código HTML. ¡Paga en Bitcoin!',
+                'adsterra': '📌 <strong>Adsterra:</strong> Regístrate en adsterra.com > Crea zona publicitaria > Copia el código de inserción',
+                'medianet': '📌 <strong>Media.net:</strong> Ve a tu dashboard > Ad Units > Copia el código JavaScript',
+                'ezoic': '📌 <strong>Ezoic:</strong> Copia el código de placeholder desde tu dashboard de Ezoic',
+                'coinzilla': '📌 <strong>Coinzilla:</strong> Regístrate en coinzilla.com > Crea banner crypto > Copia código. ¡Paga en crypto!',
+                'bitmedia': '📌 <strong>Bitmedia:</strong> Regístrate en bitmedia.io > Crea zona > Copia código. Paga en BTC/ETH'
+            };
+            
+            document.getElementById('adsHint').innerHTML = hints[platform] || hints['none'];
+        });
+
+        // Procesar el formulario
+        document.getElementById('songForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            console.log('Formulario enviado'); // Debug
+            
+            cardData = {
+                songName: document.getElementById('songName').value,
+                artist: document.getElementById('artist').value,
+                description: document.getElementById('description').value,
+                audioUrl: document.getElementById('audioUrl').value,
+                adPlatform: document.getElementById('adPlatform').value,
+                adsCode: document.getElementById('adsCode').value
+            };
+
+            console.log('Datos de la tarjeta:', cardData); // Debug
+
+            try {
+                generateCard();
+                generateQR();
+                
+                document.getElementById('formSection').classList.add('hidden');
+                document.getElementById('previewSection').classList.remove('hidden');
+                
+                console.log('Tarjeta generada exitosamente'); // Debug
+            } catch (error) {
+                console.error('Error al generar tarjeta:', error);
+                alert('Error: ' + error.message);
+            }
+        });
+
+        function generateCard() {
+            const preview = document.getElementById('musicCardPreview');
+            
+            // Detectar tipo de URL y generar reproductor apropiado
+            const audioPlayer = generateAudioPlayer(cardData.audioUrl);
+            
+            // Publicidad del desarrollador (solo si no está oculta)
+            const devAd = HIDE_DEVELOPER_AD ? '' : `
+                <div class="developer-ad">
+                    <div class="developer-ad-content">
+                        ${DEVELOPER_AD_CODE}
+                    </div>
+                </div>
+            `;
+            
+            preview.innerHTML = `
+                <div class="music-card">
+                    <h2>${escapeHtml(cardData.songName)}</h2>
+                    <div class="artist">Por ${escapeHtml(cardData.artist)}</div>
+                    ${cardData.description ? `<div class="description">${escapeHtml(cardData.description)}</div>` : ''}
+                    
+                    ${audioPlayer}
+
+                    <div class="ad-container">
+                        ${cardData.adsCode ? cardData.adsCode : '<div class="ad-placeholder">💰 Espacio publicitario - Agrega tu código para monetizar</div>'}
+                    </div>
+                    
+                    ${devAd}
+                </div>
+            `;
+
+            // Solo asignar currentAudio si es un reproductor HTML5 nativo
+            currentAudio = document.getElementById('audioPlayer');
+        }
+
+        function generateAudioPlayer(url) {
+            // Spotify
+            if (url.includes('spotify.com')) {
+                const trackId = extractSpotifyId(url);
+                return `
+                    <iframe style="border-radius:12px; margin-bottom: 20px;" 
+                        src="https://open.spotify.com/embed/track/${trackId}" 
+                        width="100%" height="152" frameBorder="0" 
+                        allowfullscreen="" 
+                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                        loading="lazy">
+                    </iframe>
+                `;
+            }
+            
+            // SoundCloud
+            if (url.includes('soundcloud.com')) {
+                return `
+                    <iframe width="100%" height="166" scrolling="no" frameborder="no" 
+                        allow="autoplay" 
+                        src="https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&color=%23ff5500&auto_play=false&hide_related=false&show_comments=false&show_user=true&show_reposts=false&show_teaser=true">
+                    </iframe>
+                `;
+            }
+            
+            // YouTube
+            if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                const videoId = extractYouTubeId(url);
+                return `
+                    <iframe width="100%" height="200" 
+                        src="https://www.youtube.com/embed/${videoId}" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen style="border-radius: 12px; margin-bottom: 20px;">
+                    </iframe>
+                `;
+            }
+            
+            // Archivo MP3 directo (con controles nativos)
+            return `
+                <audio id="audioPlayer" src="${url}" preload="metadata" controls style="width: 100%; margin-bottom: 20px; border-radius: 8px;">
+                    Tu navegador no soporta el elemento de audio.
+                </audio>
+            `;
+        }
+
+        function extractSpotifyId(url) {
+            // Extraer ID de Spotify de URLs como:
+            // https://open.spotify.com/track/XXXXX
+            // https://open.spotify.com/intl-es/track/XXXXX
+            const match = url.match(/track\/([a-zA-Z0-9]+)/);
+            return match ? match[1] : '';
+        }
+
+        function extractYouTubeId(url) {
+            // Extraer ID de YouTube de URLs como:
+            // https://www.youtube.com/watch?v=XXXXX
+            // https://youtu.be/XXXXX
+            let videoId = '';
+            if (url.includes('youtu.be/')) {
+                videoId = url.split('youtu.be/')[1].split('?')[0];
+            } else if (url.includes('youtube.com/watch')) {
+                const urlParams = new URLSearchParams(new URL(url).search);
+                videoId = urlParams.get('v');
+            }
+            return videoId || '';
+        }
+
+        function generateQR() {
+            const url = generateCardUrl();
+            const qrContainer = document.getElementById('qrcode');
+            qrContainer.innerHTML = ''; // Limpiar QR anterior
+            
+            try {
+                new QRCode(qrContainer, {
+                    text: url,
+                    width: 300,
+                    height: 300,
+                    colorDark: '#000000',
+                    colorLight: '#ffffff',
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+                console.log('QR generado exitosamente'); // Debug
+            } catch (error) {
+                console.error('Error al generar QR:', error);
+                qrContainer.innerHTML = '<p style="color: red;">Error al generar QR: ' + error.message + '</p>';
+            }
+        }
+
+        function generateCardUrl() {
+            const params = new URLSearchParams({
+                s: cardData.songName,
+                a: cardData.artist,
+                d: cardData.description || '',
+                u: cardData.audioUrl,
+                p: cardData.adPlatform || 'none',
+                ads: cardData.adsCode || ''
+            });
+            
+            return window.location.href.split('?')[0] + '?view=card&' + params.toString();
+        }
+
+        function getEmbedCode() {
+            // Generar el reproductor apropiado para el código embebido
+            let audioPlayerCode = '';
+            
+            if (cardData.audioUrl.includes('spotify.com')) {
+                const trackId = extractSpotifyId(cardData.audioUrl);
+                audioPlayerCode = `<iframe style="border-radius:12px; margin-bottom: 20px;" src="https://open.spotify.com/embed/track/${trackId}" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>`;
+            } else if (cardData.audioUrl.includes('soundcloud.com')) {
+                audioPlayerCode = `<iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=${encodeURIComponent(cardData.audioUrl)}&color=%23ff5500&auto_play=false"></iframe>`;
+            } else if (cardData.audioUrl.includes('youtube.com') || cardData.audioUrl.includes('youtu.be')) {
+                const videoId = extractYouTubeId(cardData.audioUrl);
+                audioPlayerCode = `<iframe width="100%" height="200" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius: 12px; margin-bottom: 20px;"></iframe>`;
+            } else {
+                audioPlayerCode = `<audio src="${cardData.audioUrl}" controls style="width: 100%; margin-bottom: 20px; border-radius: 8px;"></audio>`;
+            }
+            
+            // Publicidad del desarrollador (solo si no está oculta)
+            const devAdCode = HIDE_DEVELOPER_AD ? '' : `
+        <div style="background: rgba(0,0,0,0.1); border-radius: 8px; padding: 10px; margin-top: 15px; text-align: center; font-size: 0.85em; border: 1px solid rgba(255,255,255,0.2);">
+            ${DEVELOPER_AD_CODE}
+        </div>`;
+            
+            return `<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${escapeHtml(cardData.songName)} - ${escapeHtml(cardData.artist)}</title>
+    <style>
+        body { margin: 0; padding: 20px; font-family: Arial, sans-serif; background: #f5f5f5; }
+        .music-card { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 15px; padding: 25px; color: white; max-width: 500px; margin: 0 auto; }
+        h2 { margin: 0 0 10px 0; font-size: 1.8em; }
+        .artist { opacity: 0.9; margin-bottom: 15px; font-size: 1.1em; }
+        .description { margin-bottom: 20px; line-height: 1.5; }
+        .ad-container { background: rgba(255,255,255,0.2); border-radius: 8px; padding: 15px; text-align: center; min-height: 100px; display: flex; align-items: center; justify-content: center; }
+    </style>
+</head>
+<body>
+    <div class="music-card">
+        <h2>${escapeHtml(cardData.songName)}</h2>
+        <div class="artist">Por ${escapeHtml(cardData.artist)}</div>
+        ${cardData.description ? `<div class="description">${escapeHtml(cardData.description)}</div>` : ''}
+        
+        ${audioPlayerCode}
+
+        <div class="ad-container">
+            ${cardData.adsCode || '<div style="color: rgba(255,255,255,0.7); font-style: italic;">💰 Espacio publicitario</div>'}
+        </div>
+        ${devAdCode}
+    </div>
+</body>
+</html>`;
+        }
+
+        function copyEmbedCode() {
+            const code = getEmbedCode();
+            navigator.clipboard.writeText(code).then(() => {
+                showSuccess();
+            });
+        }
+
+        function downloadQR() {
+            const canvas = document.querySelector('#qrcode canvas');
+            const img = document.querySelector('#qrcode img');
+            
+            if (canvas) {
+                const link = document.createElement('a');
+                link.download = `${cardData.songName}-QR.png`;
+                link.href = canvas.toDataURL();
+                link.click();
+            } else if (img) {
+                const link = document.createElement('a');
+                link.download = `${cardData.songName}-QR.png`;
+                link.href = img.src;
+                link.click();
+            } else {
+                alert('No se pudo encontrar el código QR para descargar');
+            }
+        }
+
+        function reset() {
+            document.getElementById('formSection').classList.remove('hidden');
+            document.getElementById('previewSection').classList.add('hidden');
+            document.getElementById('songForm').reset();
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio = null;
+            }
+        }
+
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+
+        function showSuccess() {
+            const msg = document.getElementById('successMessage');
+            msg.classList.remove('hidden');
+            setTimeout(() => msg.classList.add('hidden'), 3000);
+        }
+
+        // Cargar tarjeta desde URL si viene de un QR
+        window.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('view') === 'card') {
+                cardData = {
+                    songName: params.get('s') || 'Sin título',
+                    artist: params.get('a') || 'Artista desconocido',
+                    description: params.get('d') || '',
+                    audioUrl: params.get('u') || '',
+                    adPlatform: params.get('p') || 'none',
+                    adsCode: params.get('ads') || ''
+                };
+                
+                document.getElementById('formSection').style.display = 'none';
+                document.getElementById('previewSection').classList.remove('hidden');
+                document.querySelector('.qr-container').style.display = 'none';
+                document.querySelector('.actions').style.display = 'none';
+                generateCard();
+            }
+        });
+    </script>
+</body>
+</html>
