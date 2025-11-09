@@ -491,6 +491,96 @@
             background: rgba(255,255,255,0.03);
         }
 
+        /* Estilos para Acerca de */
+        .profile-container {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .profile-image-wrapper {
+            flex: 0 0 300px;
+            position: relative;
+        }
+
+        .profile-image {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+            border: 4px solid rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .profile-image:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(102, 126, 234, 0.6);
+        }
+
+        .profile-content {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .skill-badge {
+            background: linear-gradient(135deg, rgba(102,126,234,0.2) 0%, rgba(118,75,162,0.2) 100%);
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(102,126,234,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .skill-badge:hover {
+            transform: scale(1.05);
+            border-color: #667eea;
+            background: linear-gradient(135deg, rgba(102,126,234,0.3) 0%, rgba(118,75,162,0.3) 100%);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .tech-badge {
+            display: inline-block;
+            background: rgba(102,126,234,0.15);
+            color: #667eea;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            margin: 3px;
+            border: 1px solid rgba(102,126,234,0.3);
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             body {
@@ -664,6 +754,7 @@
         <div class="tabs-container">
             <button class="tab-button active" onclick="switchTab('crear')">🎵 Crear Tarjeta</button>
             <button class="tab-button" onclick="switchTab('monetiza')">💰 MonetizaPro</button>
+            <button class="tab-button" onclick="switchTab('acerca')">👤 Acerca de</button>
         </div>
 
         <!-- Pestaña: Crear Tarjeta -->
@@ -1064,6 +1155,158 @@
             </div>
         </div>
         <!-- FIN Pestaña: MonetizaPro -->
+
+        <!-- Pestaña: Acerca de -->
+        <div id="acerca-tab" class="tab-content">
+            <div class="card">
+                <h2 style="text-align: center; margin-bottom: 30px; color: #667eea;">👤 Acerca del Creador</h2>
+
+                <div class="profile-container">
+                    <!-- Imagen de Perfil -->
+                    <div class="profile-image-wrapper">
+                        <img src="assets/images/profile.jpg" alt="Odracir Mena Mijares (Odry-M)" class="profile-image" 
+                             onerror="this.src='https://via.placeholder.com/300x450/667eea/white?text=Odry-M'">
+                    </div>
+
+                    <!-- Contenido del Perfil -->
+                    <div class="profile-content">
+                        <h3 style="color: #667eea; font-size: 1.8em; margin-bottom: 10px;">🎤 Odracir Mena Mijares</h3>
+                        <p style="font-size: 1.2em; color: #764ba2; font-weight: 600; margin-bottom: 20px;">
+                            Nombre Artístico: <strong>Odry-M</strong>
+                        </p>
+
+                        <p style="line-height: 1.8; margin-bottom: 20px; font-size: 1.05em;">
+                            Artista multifacético venezolano con una pasión por la música, la tecnología y el bienestar. 
+                            Como cantante profesional bajo el nombre artístico <strong>Odry-M</strong>, combino mi talento 
+                            musical con habilidades en desarrollo web, diseño y programación para crear soluciones innovadoras 
+                            que empoderan a otros artistas.
+                        </p>
+
+                        <!-- Habilidades -->
+                        <h4 style="color: #667eea; margin: 25px 0 15px 0;">🎯 Habilidades y Especialidades</h4>
+                        <div class="skills-grid">
+                            <div class="skill-badge">
+                                <div style="font-size: 24px; margin-bottom: 5px;">🎵</div>
+                                <div style="font-weight: 600;">Cantante</div>
+                            </div>
+                            <div class="skill-badge">
+                                <div style="font-size: 24px; margin-bottom: 5px;">🎹</div>
+                                <div style="font-weight: 600;">Músico</div>
+                            </div>
+                            <div class="skill-badge">
+                                <div style="font-size: 24px; margin-bottom: 5px;">💻</div>
+                                <div style="font-weight: 600;">Programador</div>
+                            </div>
+                            <div class="skill-badge">
+                                <div style="font-size: 24px; margin-bottom: 5px;">🎨</div>
+                                <div style="font-weight: 600;">Diseñador</div>
+                            </div>
+                            <div class="skill-badge">
+                                <div style="font-size: 24px; margin-bottom: 5px;">💆</div>
+                                <div style="font-weight: 600;">Masajista</div>
+                            </div>
+                            <div class="skill-badge">
+                                <div style="font-size: 24px; margin-bottom: 5px;">💪</div>
+                                <div style="font-weight: 600;">Profesor Fitness</div>
+                            </div>
+                        </div>
+
+                        <!-- Conocimientos Técnicos -->
+                        <h4 style="color: #667eea; margin: 25px 0 15px 0;">🛠️ Conocimientos Técnicos</h4>
+                        <div style="margin-bottom: 20px;">
+                            <span class="tech-badge">🤖 Inteligencia Artificial</span>
+                            <span class="tech-badge">🌐 Desarrollo Web</span>
+                            <span class="tech-badge">🎨 Photoshop</span>
+                            <span class="tech-badge">🎬 CapCut</span>
+                            <span class="tech-badge">✨ Canva</span>
+                            <span class="tech-badge">📝 WordPress</span>
+                            <span class="tech-badge">🛒 Shopify</span>
+                            <span class="tech-badge">💻 HTML/CSS/JavaScript</span>
+                            <span class="tech-badge">🎵 Producción Musical</span>
+                        </div>
+
+                        <!-- Redes Sociales -->
+                        <h4 style="color: #667eea; margin: 25px 0 15px 0;">🌐 Conecta Conmigo</h4>
+                        <div class="social-links">
+                            <a href="https://ffm.bio/bj7wdkj" target="_blank" rel="noopener noreferrer" class="social-link">
+                                🔗 Todas mis Redes
+                            </a>
+                            <a href="mailto:mena.odracir@gmail.com" class="social-link">
+                                📧 Email
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sobre el Proyecto -->
+                <div class="info-box" style="margin-top: 40px; background: linear-gradient(135deg, rgba(102,126,234,0.1) 0%, rgba(118,75,162,0.1) 100%); border-left: 4px solid #667eea;">
+                    <h3 style="color: #667eea;">💡 Sobre Este Proyecto</h3>
+                    <p style="line-height: 1.8; font-size: 1.05em;">
+                        <strong>Regalías Directas</strong> fue desarrollado con el objetivo de democratizar la monetización 
+                        musical para artistas independientes. Esta plataforma elimina barreras técnicas y permite que cualquier 
+                        artista pueda compartir su música y generar ingresos de forma profesional.
+                    </p>
+                </div>
+
+                <!-- Tecnologías Utilizadas -->
+                <div class="card" style="margin-top: 30px; background: rgba(255,255,255,0.05); border: 2px solid rgba(102,126,234,0.3);">
+                    <h3 style="color: #667eea; margin-bottom: 20px;">🤖 Desarrollado con Inteligencia Artificial</h3>
+                    <p style="line-height: 1.8; margin-bottom: 15px;">
+                        Esta página web fue desarrollada utilizando tecnologías de vanguardia con la asistencia de:
+                    </p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0;">
+                        <div style="background: rgba(102,126,234,0.1); padding: 15px; border-radius: 10px; border-left: 3px solid #667eea;">
+                            <div style="font-size: 32px; margin-bottom: 8px;">🤖</div>
+                            <div style="font-weight: 600; color: #667eea; margin-bottom: 5px;">Claude AI</div>
+                            <div style="font-size: 0.9em; opacity: 0.8;">Asistente de desarrollo por Anthropic</div>
+                        </div>
+                        
+                        <div style="background: rgba(102,126,234,0.1); padding: 15px; border-radius: 10px; border-left: 3px solid #764ba2;">
+                            <div style="font-size: 32px; margin-bottom: 8px;">💻</div>
+                            <div style="font-weight: 600; color: #764ba2; margin-bottom: 5px;">VS Code</div>
+                            <div style="font-size: 0.9em; opacity: 0.8;">Editor de código profesional</div>
+                        </div>
+                        
+                        <div style="background: rgba(102,126,234,0.1); padding: 15px; border-radius: 10px; border-left: 3px solid #667eea;">
+                            <div style="font-size: 32px; margin-bottom: 8px;">🚀</div>
+                            <div style="font-weight: 600; color: #667eea; margin-bottom: 5px;">GitHub Pages</div>
+                            <div style="font-size: 0.9em; opacity: 0.8;">Hosting gratuito y confiable</div>
+                        </div>
+                    </div>
+
+                    <p style="line-height: 1.8; margin-top: 20px; font-size: 0.95em; opacity: 0.9;">
+                        La combinación de experiencia humana en desarrollo web y música, junto con las capacidades 
+                        de IA de Claude, permitió crear una solución completa, intuitiva y profesional en tiempo récord. 
+                        Este es un ejemplo perfecto de cómo la colaboración entre humanos y AI puede generar herramientas 
+                        poderosas que benefician a toda una comunidad.
+                    </p>
+                </div>
+
+                <!-- Misión -->
+                <div class="info-box" style="margin-top: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-left: none;">
+                    <h3 style="color: white;">🎯 Misión</h3>
+                    <p style="line-height: 1.8; font-size: 1.05em;">
+                        Empoderar a artistas independientes en todo el mundo con herramientas tecnológicas accesibles 
+                        que les permitan monetizar su talento, mantener el control creativo de su obra y construir 
+                        conexiones directas con su audiencia. La música debe ser de quien la crea, y las regalías 
+                        deben ir directamente a los artistas.
+                    </p>
+                </div>
+
+                <!-- Agradecimientos -->
+                <div style="text-align: center; margin-top: 40px; padding: 30px; background: rgba(255,255,255,0.03); border-radius: 15px;">
+                    <p style="font-size: 1.2em; margin-bottom: 10px;">
+                        ✨ <strong>Gracias por usar Regalías Directas</strong> ✨
+                    </p>
+                    <p style="opacity: 0.8;">
+                        Si esta herramienta te ha sido útil, compártela con otros artistas y ayúdanos a crecer la comunidad.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+        <!-- FIN Pestaña: Acerca de -->
 
         <!-- Enlaces a Plataformas Publicitarias -->
         <div class="card" style="margin-top: 30px; background: rgba(255, 255, 255, 0.95);">
