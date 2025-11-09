@@ -1133,10 +1133,20 @@
                     adsCode: params.get('ads') || ''
                 };
                 
+                // Ocultar formulario y mostrar tarjeta
                 document.getElementById('formSection').style.display = 'none';
                 document.getElementById('previewSection').classList.remove('hidden');
-                document.querySelector('.qr-container').style.display = 'none';
-                document.querySelector('.actions').style.display = 'none';
+                
+                // Mostrar QR para que otros también puedan compartir
+                document.querySelector('.qr-container').style.display = 'block';
+                
+                // Cambiar texto del botón "Crear Nueva" a "Crear Mi Propia Tarjeta"
+                const resetButtons = document.querySelectorAll('button[onclick="reset()"]');
+                resetButtons.forEach(btn => {
+                    btn.innerHTML = '🎵 Crear Mi Propia Tarjeta';
+                });
+                
+                // Generar la tarjeta
                 generateCard();
                 
                 // Incrementar contador de vistas
