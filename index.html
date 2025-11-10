@@ -804,125 +804,7 @@
             box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
         }
 
-        /* Estilos para Marketplace Musical */
-        .marketplace-header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 20px;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-            border-radius: 15px;
-        }
-
-        .marketplace-subtabs {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin: 20px 0;
-            flex-wrap: wrap;
-        }
-
-        .marketplace-subtab {
-            padding: 12px 30px;
-            background: rgba(255,255,255,0.1);
-            border: 2px solid rgba(102, 126, 234, 0.3);
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 16px;
-            font-weight: 600;
-            color: white;
-        }
-
-        .marketplace-subtab:hover {
-            background: rgba(102, 126, 234, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .marketplace-subtab.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-color: #667eea;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        .marketplace-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
-        }
-
-        .marketplace-item {
-            background: rgba(255,255,255,0.95);
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .dark-mode .marketplace-item {
-            background: rgba(15, 52, 96, 0.95);
-        }
-
-        .marketplace-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.25);
-        }
-
-        .marketplace-item h3 {
-            color: #667eea;
-            margin-bottom: 5px;
-            font-size: 1.2em;
-        }
-
-        .marketplace-item .artist-name {
-            color: #764ba2;
-            font-size: 0.95em;
-            margin-bottom: 15px;
-            font-weight: 500;
-        }
-
-        .dark-mode .marketplace-item .artist-name {
-            color: #a78bfa;
-        }
-
-        .marketplace-item .platform-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: 15px;
-            font-size: 0.75em;
-            margin-top: 10px;
-            font-weight: 600;
-        }
-
-        .marketplace-item iframe {
-            width: 100%;
-            margin-top: 15px;
-            border-radius: 10px;
-        }
-
-        .marketplace-form {
-            background: rgba(255,255,255,0.95);
-            padding: 30px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-        }
-
-        .dark-mode .marketplace-form {
-            background: rgba(15, 52, 96, 0.95);
-        }
-
-        .marketplace-empty {
-            text-align: center;
-            padding: 60px 20px;
-            color: rgba(255,255,255,0.7);
-            font-size: 1.1em;
-        }
-
+        /* Estilos para guía de plataformas */
         .platform-guide {
             background: linear-gradient(135deg, rgba(39, 174, 96, 0.1) 0%, rgba(46, 204, 113, 0.1) 100%);
             border-left: 4px solid #27ae60;
@@ -981,21 +863,6 @@
 
         .dark-mode .platform-card small {
             color: #b0b0b0;
-        }
-
-        /* Responsive para Marketplace */
-        @media (max-width: 768px) {
-            .marketplace-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .marketplace-subtabs {
-                flex-direction: column;
-            }
-            
-            .marketplace-subtab {
-                width: 100%;
-            }
         }
 
         .ad-modal-trigger {
@@ -1145,8 +1012,7 @@
         <!-- Pestañas de Navegación -->
         <div class="tabs-container">
             <button class="tab-button active" onclick="switchTab('crear')">🎵 Crear Tarjeta</button>
-            <button class="tab-button" onclick="switchTab('marketplace')">🎪 Marketplace</button>
-            <button class="tab-button" onclick="switchTab('monetiza')">💰 MonetizaPro</button>
+            <button class="tab-button" onclick="switchTab('plataformas')">� Plataformas</button>
             <button class="tab-button" onclick="switchTab('acerca')">👤 Acerca de</button>
         </div>
 
@@ -1157,10 +1023,10 @@
         <div id="formSection" class="card">
             <div class="info-box">
                 <h3>📝 Instrucciones</h3>
-                <p>1. Sube tu canción a <strong>Spotify, SoundCloud, YouTube</strong> o cualquier servicio y copia el enlace</p>
-                <p>2. Rellena los datos de tu canción</p>
-                <p>3. (Opcional) Elige tu plataforma publicitaria y pega el código para monetizar</p>
-                <p>4. Genera tu tarjeta y comparte el QR</p>
+                <p>1. Sube tu canción a una plataforma que pague por reproducciones (ver lista abajo)</p>
+                <p>2. Copia el enlace de tu canción</p>
+                <p>3. Rellena los datos y genera tu tarjeta</p>
+                <p>4. Comparte el QR y gana por cada reproducción</p>
                 
                 <p style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px; border-radius: 8px; margin-top: 15px;">
                     <strong>🔗 ¿Cómo funciona el compartir?</strong><br>
@@ -1170,20 +1036,55 @@
                     ✅ <strong>Cualquiera puede abrir el link en cualquier momento</strong><br>
                     ✅ No necesitas mantener la página abierta
                 </p>
+            </div>
 
-                <p><strong>💡 Plataformas de audio compatibles:</strong></p>
-                <p style="margin-left: 15px;">
-                    • <strong>Spotify:</strong> Copia el enlace de tu canción<br>
-                    • <strong>SoundCloud:</strong> Copia el enlace de tu track<br>
-                    • <strong>YouTube:</strong> Copia el enlace del video<br>
-                    • <strong>MP3 directo:</strong> URL directa a archivo .mp3
+            <!-- Guía de Plataformas Monetizadas -->
+            <div class="platform-guide">
+                <h4>💡 ¿Cómo funciona?</h4>
+                <p style="margin-bottom: 15px; line-height: 1.6;">
+                    <strong>Para artistas:</strong> Promociona tu música GRATIS y gana dinero directo de plataformas que pagan por reproducción.<br>
+                    <strong>Win-Win:</strong> Tú ganas por streams, nosotros ganamos tráfico con publicidad. ¡Todos ganamos! 🎉
                 </p>
-                <p><strong>💰 Plataformas publicitarias que funcionan directo:</strong></p>
-                <p style="margin-left: 15px;">
-                    • <strong>A-Ads:</strong> Pagos en Bitcoin, sin verificación necesaria<br>
-                    • <strong>Adsterra:</strong> Buenos CPMs, pega tu código y funciona<br>
-                    • <strong>PropellerAds:</strong> Múltiples formatos, setup rápido<br>
-                    • <strong>Coinzilla/Bitmedia:</strong> Red crypto para audiencia blockchain
+                
+                <h4>🎵 Plataformas de Audio Monetizado (Recomendadas)</h4>
+                <div class="platform-list">
+                    <div class="platform-card">
+                        <strong>🎙️ Anchor (Spotify)</strong>
+                        <small>Monetización automática por Spotify. Gratis, fácil setup. Ideal para empezar.</small>
+                    </div>
+                    <div class="platform-card">
+                        <strong>🔊 Spreaker</strong>
+                        <small>Pagos por reproducción + ads. Muy buenos CPMs para podcasts y música.</small>
+                    </div>
+                    <div class="platform-card">
+                        <strong>🎧 SoundCloud Premier</strong>
+                        <small>Monetización directa. Requiere Pro Unlimited ($12/mes). Gran alcance.</small>
+                    </div>
+                    <div class="platform-card">
+                        <strong>📻 AdsWizz</strong>
+                        <small>Plataforma de ads para audio digital. Usada por grandes broadcasters.</small>
+                    </div>
+                    <div class="platform-card">
+                        <strong>📡 Triton Digital</strong>
+                        <small>Monetización profesional para streaming de audio. Enterprise-level.</small>
+                    </div>
+                </div>
+
+                <h4 style="margin-top: 20px;">🎬 Plataformas de Video Monetizado</h4>
+                <div class="platform-list">
+                    <div class="platform-card">
+                        <strong>📺 YouTube (Monetizado)</strong>
+                        <small>Requiere 1,000 subs + 4,000 horas. Mejores CPMs del mercado.</small>
+                    </div>
+                    <div class="platform-card">
+                        <strong>🎥 Vimeo OTT</strong>
+                        <small>Vende directamente a tu audiencia. Sin ads, pago por suscripción.</small>
+                    </div>
+                </div>
+
+                <p style="margin-top: 20px; padding: 15px; background: rgba(39, 174, 96, 0.2); border-radius: 8px; font-weight: 600;">
+                    ✅ <strong>Importante:</strong> Solo agrega contenido de plataformas donde TÚ ganes dinero por reproducción. 
+                    Así ambos ganamos: tú por streams, nosotros por tráfico publicitario.
                 </p>
             </div>
 
@@ -1205,22 +1106,9 @@
 
                 <div class="form-group">
                     <label>🔗 Enlace del Audio *</label>
-                    <input type="url" id="audioUrl" required placeholder="https://ejemplo.com/mi-cancion.mp3">
+                    <input type="url" id="audioUrl" required placeholder="https://open.spotify.com/track/... o https://soundcloud.com/...">
                     <small style="color: #666; display: block; margin-top: 5px;">
-                        ✅ Soporta: Spotify, SoundCloud, YouTube, archivos MP3 directos
-                    </small>
-                </div>
-
-                <div class="form-group">
-                    <label id="adsCodeLabel">💰 Código de Inserción Publicitario (Opcional)</label>
-                    <textarea id="adsCode" placeholder='Pega aquí el código de tu plataforma publicitaria (ej: <script>...</script> o <div>...</div>)'></textarea>
-                    <small id="adsHint" style="color: #666; display: block; margin-top: 5px;">
-                        ✅ <strong style="color: #27ae60;">Solo pega el código y funciona!</strong> No necesitas verificar nada<br>
-                        <br>
-                        ℹ️ <strong>A-Ads:</strong> Crea una zona publicitaria y pega el código HTML<br>
-                        ℹ️ <strong>Adsterra:</strong> Pega el código de zona publicitaria (Banner/Social Bar/Native)<br>
-                        ℹ️ <strong>PropellerAds:</strong> Pega el código de anuncio generado<br>
-                        ℹ️ <strong>Coinzilla/Bitmedia:</strong> Pega el código del banner crypto
+                        ✅ Usa plataformas monetizadas: Anchor, Spotify, SoundCloud Premier, Spreaker, YouTube monetizado
                     </small>
                 </div>
 
@@ -1277,156 +1165,15 @@
         </div>
         <!-- FIN Pestaña: Crear Tarjeta -->
 
-        <!-- Pestaña: Marketplace Musical -->
-        <div id="marketplace-tab" class="tab-content">
-            <div class="marketplace-header">
-                <h2 style="font-size: 2em; margin-bottom: 10px;">🎪 Marketplace Musical</h2>
-                <p style="font-size: 1.1em; opacity: 0.9;">Promociona tu música gratis y gana por reproducciones</p>
-            </div>
-
-            <!-- Subtabs: Audio / Video -->
-            <div class="marketplace-subtabs">
-                <button class="marketplace-subtab active" onclick="switchMarketplace('audio')">🎵 Audio</button>
-                <button class="marketplace-subtab" onclick="switchMarketplace('video')">🎬 Video</button>
-            </div>
-
-            <!-- Guía de Plataformas Monetizadas -->
-            <div class="platform-guide">
-                <h4>💡 ¿Cómo funciona el Marketplace?</h4>
-                <p style="margin-bottom: 15px; line-height: 1.6;">
-                    <strong>Para artistas:</strong> Promociona tu música GRATIS y gana dinero directo de plataformas que pagan por reproducción.<br>
-                    <strong>Win-Win:</strong> Tú ganas por streams, nosotros ganamos tráfico con publicidad. ¡Todos ganamos! 🎉
-                </p>
-                
-                <h4>🎵 Plataformas de Audio Monetizado (Recomendadas)</h4>
-                <div class="platform-list">
-                    <div class="platform-card">
-                        <strong>🎙️ Anchor (Spotify)</strong>
-                        <small>Monetización automática por Spotify. Gratis, fácil setup. Ideal para empezar.</small>
-                    </div>
-                    <div class="platform-card">
-                        <strong>🔊 Spreaker</strong>
-                        <small>Pagos por reproducción + ads. Muy buenos CPMs para podcasts y música.</small>
-                    </div>
-                    <div class="platform-card">
-                        <strong>🎧 SoundCloud Premier</strong>
-                        <small>Monetización directa. Requiere Pro Unlimited ($12/mes). Gran alcance.</small>
-                    </div>
-                    <div class="platform-card">
-                        <strong>📻 AdsWizz</strong>
-                        <small>Plataforma de ads para audio digital. Usada por grandes broadcasters.</small>
-                    </div>
-                    <div class="platform-card">
-                        <strong>📡 Triton Digital</strong>
-                        <small>Monetización profesional para streaming de audio. Enterprise-level.</small>
-                    </div>
-                </div>
-
-                <h4 style="margin-top: 20px;">🎬 Plataformas de Video Monetizado</h4>
-                <div class="platform-list">
-                    <div class="platform-card">
-                        <strong>📺 YouTube (Monetizado)</strong>
-                        <small>Requiere 1,000 subs + 4,000 horas. Mejores CPMs del mercado.</small>
-                    </div>
-                    <div class="platform-card">
-                        <strong>🎥 Vimeo OTT</strong>
-                        <small>Vende directamente a tu audiencia. Sin ads, pago por suscripción.</small>
-                    </div>
-                </div>
-
-                <p style="margin-top: 20px; padding: 15px; background: rgba(39, 174, 96, 0.2); border-radius: 8px; font-weight: 600;">
-                    ✅ <strong>Importante:</strong> Solo agrega contenido de plataformas donde TÚ ganes dinero por reproducción. 
-                    Así ambos ganamos: tú por streams, nosotros por tráfico publicitario.
-                </p>
-            </div>
-
-            <!-- Formulario para Agregar Contenido -->
-            <div class="marketplace-form">
-                <h3 style="margin-bottom: 20px; color: #667eea;">➕ Agrega Tu Música al Marketplace</h3>
-                <form id="marketplaceForm" onsubmit="addToMarketplace(event)">
-                    <div class="form-group">
-                        <label>🎤 Nombre del Artista *</label>
-                        <input type="text" id="mp_artist" required placeholder="Tu nombre o banda">
-                    </div>
-
-                    <div class="form-group">
-                        <label>🎵 Título de la Canción/Track *</label>
-                        <input type="text" id="mp_title" required placeholder="Nombre de tu canción">
-                    </div>
-
-                    <div class="form-group">
-                        <label>📱 Tipo de Contenido *</label>
-                        <select id="mp_type" required>
-                            <option value="audio">🎵 Audio</option>
-                            <option value="video">🎬 Video</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>🔗 URL del Reproductor (Embed) *</label>
-                        <input type="url" id="mp_url" required placeholder="https://...">
-                        <small style="display: block; margin-top: 8px; color: #666; line-height: 1.6;">
-                            <strong>Audio:</strong> Anchor, Spreaker, SoundCloud Premier, AdsWizz, Triton Digital<br>
-                            <strong>Video:</strong> YouTube (monetizado), Vimeo OTT<br>
-                            💡 Usa la URL del iframe embed, no la URL normal de la página
-                        </small>
-                    </div>
-
-                    <div class="form-group">
-                        <label>🏷️ Plataforma *</label>
-                        <select id="mp_platform" required>
-                            <optgroup label="🎵 Audio Monetizado">
-                                <option value="Anchor">Anchor (Spotify)</option>
-                                <option value="Spreaker">Spreaker</option>
-                                <option value="SoundCloud Premier">SoundCloud Premier</option>
-                                <option value="AdsWizz">AdsWizz</option>
-                                <option value="Triton Digital">Triton Digital</option>
-                            </optgroup>
-                            <optgroup label="🎬 Video Monetizado">
-                                <option value="YouTube">YouTube</option>
-                                <option value="Vimeo OTT">Vimeo OTT</option>
-                            </optgroup>
-                        </select>
-                    </div>
-
-                    <button type="submit">✨ Agregar al Marketplace</button>
-                </form>
-            </div>
-
-            <!-- Contenedor de Audio -->
-            <div id="marketplace-audio" class="marketplace-content active">
-                <h3 style="color: white; margin-bottom: 20px; text-align: center;">🎵 Música y Podcasts</h3>
-                <div id="audioGrid" class="marketplace-grid">
-                    <!-- Los items se agregan dinámicamente aquí -->
-                </div>
-            </div>
-
-            <!-- Contenedor de Video -->
-            <div id="marketplace-video" class="marketplace-content" style="display: none;">
-                <h3 style="color: white; margin-bottom: 20px; text-align: center;">🎬 Videos Musicales</h3>
-                <div id="videoGrid" class="marketplace-grid">
-                    <!-- Los items se agregan dinámicamente aquí -->
-                </div>
-            </div>
-
-            <!-- Banner de Referido Adsterra -->
-            <div class="adsterra-referral-banner">
-                <a href="https://beta.publishers.adsterra.com/referral/trxLDwbhZp" rel="nofollow" target="_blank">
-                    <img alt="Monetiza tu sitio con Adsterra" src="https://landings-cdn.adsterratech.com/referralBanners/png/728%20x%2090%20px.png" />
-                </a>
-            </div>
-        </div>
-        <!-- FIN Pestaña: Marketplace -->
-
-        <!-- Pestaña: MonetizaPro -->
-        <div id="monetiza-tab" class="tab-content">
+        <!-- Pestaña: Plataformas -->
+        <div id="plataformas-tab" class="tab-content">
             <div class="card">
-                <h2 style="text-align: center; margin-bottom: 15px; color: #667eea;">💰 MonetizaPro</h2>
-                <p style="text-align: center; font-size: 1.1em; color: #666; margin-bottom: 30px;">
-                    Guía completa para monetizar tus canciones con anuncios integrados en el audio
+                <h2 style="text-align: center; margin-bottom: 20px; color: #667eea;">� Plataformas de Referidos</h2>
+                <p style="text-align: center; margin-bottom: 30px; font-size: 1.05em;">
+                    Si también quieres ganar con publicidad visual en tus proyectos web, estas son plataformas confiables
                 </p>
 
-                <!-- Introducción -->
+                <h3 style="color: #667eea; margin: 30px 0 20px 0; text-align: center;">🔗 Enlaces de Referidos</h3>
                 <div class="info-box" style="background: linear-gradient(135deg, rgba(102,126,234,0.1) 0%, rgba(118,75,162,0.1) 100%); border-left: 4px solid #667eea;">
                     <h3 style="color: #667eea;">🎯 ¿Qué es la Monetización con Anuncios en Audio?</h3>
                     <p>Similar a Spotify, estas plataformas <strong>insertan anuncios automáticamente</strong> en tus tracks (antes, durante o después de la canción) y tú ganas dinero por cada reproducción. No necesitas hacer nada técnico, ellos se encargan de todo.</p>
@@ -1863,77 +1610,6 @@
         </div>
         <!-- FIN Pestaña: Acerca de -->
 
-        <!-- Enlaces a Plataformas Publicitarias -->
-        <div class="card" style="margin-top: 30px; background: rgba(255, 255, 255, 0.95);">
-            <h2 style="text-align: center; margin-bottom: 20px; color: #667eea;">💰 Monetiza Tu Música</h2>
-            <p style="text-align: center; margin-bottom: 25px; color: #666;">
-                ✅ Plataformas compatibles - <strong>funcionan directo</strong>, solo pega el código:
-            </p>
-            
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
-                <!-- A-Ads -->
-                <a href="https://aads.com/advertise/?partner=2416710" target="_blank" rel="noopener noreferrer"
-                   style="display: block; padding: 15px; background: linear-gradient(135deg, #f7931a 0%, #ff9500 100%); 
-                          color: white; text-decoration: none; border-radius: 8px; transition: transform 0.2s;"
-                   onmouseover="this.style.transform='translateY(-3px)'" 
-                   onmouseout="this.style.transform='translateY(0)'">
-                    <strong style="font-size: 16px;">₿ A-Ads (Bitcoin)</strong><br>
-                    <small style="opacity: 0.9;">Pagos en crypto • Sin verificación</small>
-                </a>
-
-                <!-- Adsterra -->
-                <a href="https://publishers.adsterra.com/referral/KCfqW3KQge" target="_blank" rel="noopener noreferrer"
-                   style="display: block; padding: 15px; background: linear-gradient(135deg, #00c9ff 0%, #92fe9d 100%); 
-                          color: white; text-decoration: none; border-radius: 8px; transition: transform 0.2s;"
-                   onmouseover="this.style.transform='translateY(-3px)'" 
-                   onmouseout="this.style.transform='translateY(0)'">
-                    <strong style="font-size: 16px;">🚀 Adsterra</strong><br>
-                    <small style="opacity: 0.9;">Buenos CPMs • Pago mínimo $5</small>
-                </a>
-
-                <!-- PropellerAds -->
-                <a href="https://propellerads.com/#/auth/signup?placement=footer" target="_blank" rel="noopener noreferrer"
-                   style="display: block; padding: 15px; background: linear-gradient(135deg, #283c86 0%, #45a247 100%); 
-                          color: white; text-decoration: none; border-radius: 8px; transition: transform 0.2s;"
-                   onmouseover="this.style.transform='translateY(-3px)'" 
-                   onmouseout="this.style.transform='translateY(0)'">
-                    <strong style="font-size: 16px;">✈️ PropellerAds</strong><br>
-                    <small style="opacity: 0.9;">Múltiples formatos • Setup rápido</small>
-                </a>
-
-                <!-- Coinzilla -->
-                <a href="https://coinzilla.com/publishers/" target="_blank" rel="noopener noreferrer"
-                   style="display: block; padding: 15px; background: linear-gradient(135deg, #fc6076 0%, #ff9a44 100%); 
-                          color: white; text-decoration: none; border-radius: 8px; transition: transform 0.2s;"
-                   onmouseover="this.style.transform='translateY(-3px)'" 
-                   onmouseout="this.style.transform='translateY(0)'">
-                    <strong style="font-size: 16px;">🪙 Coinzilla</strong><br>
-                    <small style="opacity: 0.9;">Red crypto • Anuncios blockchain</small>
-                </a>
-
-                <!-- Bitmedia -->
-                <a href="https://bitmedia.io/publishers" target="_blank" rel="noopener noreferrer"
-                   style="display: block; padding: 15px; background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); 
-                          color: white; text-decoration: none; border-radius: 8px; transition: transform 0.2s;"
-                   onmouseover="this.style.transform='translateY(-3px)'" 
-                   onmouseout="this.style.transform='translateY(0)'">
-                    <strong style="font-size: 16px;">💎 Bitmedia</strong><br>
-                    <small style="opacity: 0.9;">Bitcoin ads • Audiencia crypto</small>
-                </a>
-            </div>
-
-            <p style="text-align: center; margin-top: 25px; color: #27ae60; font-size: 14px;">
-                ✅ <strong>Sin complicaciones:</strong> Estas plataformas NO requieren verificar dominios. Solo crea tu cuenta, genera el código y pégalo aquí.
-            </p>
-        </div>
-
-        <!-- Banner de Referido Adsterra -->
-        <div class="adsterra-referral-banner">
-            <a href="https://beta.publishers.adsterra.com/referral/trxLDwbhZp" rel="nofollow" target="_blank">
-                <img alt="Monetiza tu sitio con Adsterra" src="https://landings-cdn.adsterratech.com/referralBanners/png/728%20x%2090%20px.png" />
-            </a>
-        </div>
-
         <!-- Anuncio A-Ads del Desarrollador -->
         <div id="frame" style="width: 100%;margin: auto;position: relative; z-index: 99998; margin-top: 30px;">
             <iframe data-aa='2416691' src='//acceptable.a-ads.com/2416691/?size=Adaptive'
@@ -2142,191 +1818,6 @@
                 tryShowModal();
             }
         }, MODAL_CONFIG.FIRST_DELAY);
-
-        // ==========================================
-        // FUNCIONES DEL MARKETPLACE MUSICAL
-        // ==========================================
-
-        // Cargar items del marketplace desde localStorage
-        function loadMarketplaceItems() {
-            const audioItems = JSON.parse(localStorage.getItem('marketplace_audio') || '[]');
-            const videoItems = JSON.parse(localStorage.getItem('marketplace_video') || '[]');
-            
-            renderMarketplaceItems('audio', audioItems);
-            renderMarketplaceItems('video', videoItems);
-        }
-
-        // Renderizar items del marketplace
-        function renderMarketplaceItems(type, items) {
-            const gridId = type === 'audio' ? 'audioGrid' : 'videoGrid';
-            const grid = document.getElementById(gridId);
-            
-            if (!grid) return;
-            
-            if (items.length === 0) {
-                grid.innerHTML = `
-                    <div class="marketplace-empty">
-                        <p style="font-size: 1.3em; margin-bottom: 15px;">
-                            ${type === 'audio' ? '🎵' : '🎬'} Aún no hay contenido ${type === 'audio' ? 'de audio' : 'de video'}
-                        </p>
-                        <p style="font-size: 0.95em;">
-                            Sé el primero en promocionar tu música aquí
-                        </p>
-                    </div>
-                `;
-                return;
-            }
-            
-            grid.innerHTML = items.map(item => `
-                <div class="marketplace-item">
-                    <h3>${escapeHtml(item.title)}</h3>
-                    <div class="artist-name">${escapeHtml(item.artist)}</div>
-                    <span class="platform-badge">📊 vía ${escapeHtml(item.platform)}</span>
-                    ${generateEmbedPlayer(item.url, item.platform, type)}
-                    <button onclick="removeFromMarketplace('${type}', '${item.id}')" 
-                            style="margin-top: 15px; padding: 8px 15px; background: rgba(231, 76, 60, 0.8); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.9em; width: 100%;">
-                        🗑️ Eliminar
-                    </button>
-                </div>
-            `).join('');
-        }
-
-        // Generar reproductor embebido según plataforma
-        function generateEmbedPlayer(url, platform, type) {
-            // Detectar tipo de URL y generar iframe apropiado
-            
-            if (url.includes('spotify.com') || url.includes('anchor.fm')) {
-                // Spotify/Anchor
-                return `<iframe src="${url}" width="100%" height="152" frameBorder="0" allowfullscreen="" 
-                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
-                        style="border-radius:12px;"></iframe>`;
-            } 
-            else if (url.includes('soundcloud.com')) {
-                // SoundCloud
-                return `<iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" 
-                        src="${url}" style="border-radius:12px;"></iframe>`;
-            } 
-            else if (url.includes('spreaker.com')) {
-                // Spreaker
-                return `<iframe src="${url}" width="100%" height="200" frameborder="0"></iframe>`;
-            }
-            else if (url.includes('youtube.com') || url.includes('youtu.be')) {
-                // YouTube
-                const videoId = extractYouTubeId(url);
-                return `<iframe width="100%" height="200" src="https://www.youtube.com/embed/${videoId}" 
-                        frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                        allowfullscreen style="border-radius:12px;"></iframe>`;
-            }
-            else if (url.includes('vimeo.com')) {
-                // Vimeo
-                const vimeoId = url.split('/').pop();
-                return `<iframe src="https://player.vimeo.com/video/${vimeoId}" width="100%" height="200" 
-                        frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen 
-                        style="border-radius:12px;"></iframe>`;
-            }
-            else {
-                // Genérico - Intentar como iframe directo
-                return `<iframe src="${url}" width="100%" height="200" frameborder="0" 
-                        style="border-radius:12px; background: rgba(0,0,0,0.05);"></iframe>`;
-            }
-        }
-
-        // Agregar item al marketplace
-        function addToMarketplace(event) {
-            event.preventDefault();
-            
-            const artist = document.getElementById('mp_artist').value.trim();
-            const title = document.getElementById('mp_title').value.trim();
-            const type = document.getElementById('mp_type').value;
-            const url = document.getElementById('mp_url').value.trim();
-            const platform = document.getElementById('mp_platform').value;
-            
-            // Validar que la URL sea de una plataforma permitida
-            const validPlatforms = {
-                audio: ['spotify.com', 'anchor.fm', 'soundcloud.com', 'spreaker.com', 'adswizz.com', 'tritondigital.com'],
-                video: ['youtube.com', 'youtu.be', 'vimeo.com']
-            };
-            
-            const isValidUrl = validPlatforms[type].some(platform => url.includes(platform));
-            
-            if (!isValidUrl) {
-                alert(`⚠️ Por favor usa una URL de las plataformas monetizadas recomendadas:\n\n${type === 'audio' ? 'Audio: Anchor, Spotify, SoundCloud Premier, Spreaker, AdsWizz, Triton Digital' : 'Video: YouTube (monetizado), Vimeo OTT'}`);
-                return;
-            }
-            
-            // Crear item
-            const item = {
-                id: Date.now().toString(),
-                artist,
-                title,
-                url,
-                platform,
-                addedDate: new Date().toISOString()
-            };
-            
-            // Guardar en localStorage
-            const storageKey = `marketplace_${type}`;
-            const items = JSON.parse(localStorage.getItem(storageKey) || '[]');
-            items.unshift(item); // Agregar al inicio
-            
-            // Limitar a 50 items por tipo
-            if (items.length > 50) {
-                items.pop();
-            }
-            
-            localStorage.setItem(storageKey, JSON.stringify(items));
-            
-            // Recargar vista
-            renderMarketplaceItems(type, items);
-            
-            // Cambiar a la pestaña correcta
-            switchMarketplace(type);
-            
-            // Limpiar formulario
-            document.getElementById('marketplaceForm').reset();
-            
-            // Mostrar mensaje de éxito
-            showSuccess('✅ ¡Tu música ha sido agregada al Marketplace!');
-            
-            // Scroll a la sección de contenido
-            document.getElementById(`marketplace-${type}`).scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-
-        // Eliminar item del marketplace
-        function removeFromMarketplace(type, itemId) {
-            if (!confirm('¿Seguro que quieres eliminar este contenido del Marketplace?')) {
-                return;
-            }
-            
-            const storageKey = `marketplace_${type}`;
-            const items = JSON.parse(localStorage.getItem(storageKey) || '[]');
-            const filtered = items.filter(item => item.id !== itemId);
-            
-            localStorage.setItem(storageKey, JSON.stringify(filtered));
-            renderMarketplaceItems(type, filtered);
-            
-            showSuccess('🗑️ Contenido eliminado del Marketplace');
-        }
-
-        // Cambiar entre Audio/Video en Marketplace
-        function switchMarketplace(type) {
-            // Ocultar todos los contenidos
-            document.querySelectorAll('.marketplace-content').forEach(content => {
-                content.style.display = 'none';
-            });
-            
-            // Desactivar todos los subtabs
-            document.querySelectorAll('.marketplace-subtab').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            // Activar el seleccionado
-            document.getElementById(`marketplace-${type}`).style.display = 'block';
-            event.target.classList.add('active');
-        }
-
-        // Cargar marketplace al inicio
-        loadMarketplaceItems();
 
         // Función para cambiar entre pestañas (con sistema inteligente)
         function switchTab(tabName) {
