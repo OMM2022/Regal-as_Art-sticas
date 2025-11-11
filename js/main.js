@@ -193,15 +193,36 @@ function loadCardFromUrl() {
 
 // Inicialización al cargar la página
 window.addEventListener('DOMContentLoaded', () => {
+    console.log('✅ DOM cargado - Inicializando aplicación...');
+    
     loadCardFromUrl();
     initAdsSystem();
     updateRemoveButtons();
     
     // Manejo del formulario
     const songForm = document.getElementById('songForm');
+    console.log('🔍 Formulario encontrado:', songForm);
+    
     if (songForm) {
+        console.log('✅ Formulario #songForm encontrado, agregando listener...');
         songForm.addEventListener('submit', function(e) {
             e.preventDefault();
+            console.log('📝 Formulario enviado - Recopilando datos...');
+            
+            // Verificar que todos los elementos existan
+            const elements = {
+                songName: document.getElementById('songName'),
+                artist: document.getElementById('artist'),
+                description: document.getElementById('description')
+            };
+            
+            console.log('🔍 Elementos del formulario:', elements);
+            
+            if (!elements.songName || !elements.artist) {
+                console.error('❌ Faltan elementos del formulario:', elements);
+                alert('Error: No se encontraron los campos del formulario. Por favor recarga la página.');
+                return;
+            }
             
             cardData = {
                 songName: document.getElementById('songName').value,
@@ -229,6 +250,8 @@ window.addEventListener('DOMContentLoaded', () => {
                 website: document.getElementById('website').value
             };
 
+            console.log('📦 Datos recopilados:', cardData);
+
             try {
                 generateCard();
                 generateQR();
@@ -238,12 +261,16 @@ window.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('cardResult').classList.remove('hidden');
                 
                 showSuccess();
+                console.log('✅ Tarjeta generada exitosamente');
             } catch (error) {
-                console.error('Error al generar tarjeta:', error);
+                console.error('❌ Error al generar tarjeta:', error);
                 alert('Error: ' + error.message);
             }
         });
     } else {
-        console.error('⚠️ No se encontró el formulario #songForm');
+        console.error('❌ No se encontró el formulario #songForm');
+        alert('Error: No se pudo encontrar el formulario. Por favor recarga la página.');
     }
+    
+    console.log('✅ Inicialización completada');
 });
