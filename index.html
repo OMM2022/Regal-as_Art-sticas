@@ -778,8 +778,9 @@
         </div>
     </div>
 
-    <!-- Inline scripts removed. Functionality moved to modular JS files in /js (config.js, utils.js, ui.js, ads.js, press-kit.js, main.js). -->
-
+    <script>
+        // Funciones complementarias que aún no han sido modularizadas
+        
         // Compartir en Facebook
         function shareFacebook() {
             const url = generateCardUrl();
@@ -1297,7 +1298,7 @@
             </div>
         </div>` : '';
 
-            <!-- Inline embed/viewCounter template removed; handled by modular JS (press-kit.js / utils.js). -->
+            // Inline embed/viewCounter template removed; handled by modular JS (press-kit.js / utils.js).
         }
 
         function copyEmbedCode() {
