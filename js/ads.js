@@ -18,6 +18,12 @@ function showAdModalAfterDelay() {
 
 // Mostrar modal global de anuncios al cargar la página
 function showGlobalAdModal() {
+    // Verificar que el modal exista antes de intentar mostrarlo
+    if (!document.getElementById('globalAdModal')) {
+        console.warn('⚠️ Modal global de anuncios no encontrado, no se mostrará');
+        return;
+    }
+    
     setTimeout(() => {
         openGlobalAdModal();
     }, 5000);
@@ -25,13 +31,17 @@ function showGlobalAdModal() {
 
 // Inicializar sistema de anuncios
 function initAdsSystem() {
+    console.log('🎯 Inicializando sistema de anuncios...');
+    
     // Verificar si debe mostrarse el modal global
     const urlParams = new URLSearchParams(window.location.search);
     const isCardView = urlParams.has('view') || urlParams.has('s');
     
     if (!isCardView) {
-        // Solo mostrar modal global si no es vista de tarjeta
+        console.log('📢 No es vista de tarjeta, mostrando modal global en 5s');
         showGlobalAdModal();
+    } else {
+        console.log('🎵 Vista de tarjeta detectada, no se muestra modal global');
     }
 }
 

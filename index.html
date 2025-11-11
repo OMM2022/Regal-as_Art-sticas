@@ -40,7 +40,7 @@
     <!-- CSS Externo -->
     <link rel="stylesheet" href="css/styles.css">
     
-    <!-- Librer�as externas -->
+    <!-- Librer�as externas -->
 </head>
 <body>
     <!-- Botón de Cambio de Tema -->
@@ -147,9 +147,17 @@
                 <div class="form-group">
                     <label>🔗 Enlaces de Audio *</label>
                     <div id="audioLinksContainer">
-                        <div class="audio-link-item" style="display: flex; gap: 10px; margin-bottom: 10px; align-items: center;">
-                            <input type="url" class="audioUrl" required placeholder="https://open.spotify.com/track/... o https://soundcloud.com/..." style="flex: 1;">
-                            <button type="button" class="remove-audio-btn" onclick="removeAudioLink(this)" style="display: none; background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 18px;" title="Eliminar">✖️</button>
+                        <div class="form-group audio-link-group">
+                            <label for="audioUrl0">Enlace de Audio 1 (Spotify, YouTube, SoundCloud, etc.)</label>
+                            <div style="display: flex; gap: 10px;">
+                                <input type="url" id="audioUrl0" required placeholder="https://open.spotify.com/track/..." style="flex: 1;">
+                                <button type="button" 
+                                        class="remove-audio-btn" 
+                                        onclick="removeAudioLink(this)" 
+                                        style="display: none; width: auto; background: #e74c3c; padding: 12px 20px;">
+                                    ❌
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <button type="button" onclick="addAudioLink()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; margin-top: 10px; width: 100%;">
@@ -1780,49 +1788,6 @@
             return text.replace(/[&<>"']/g, m => map[m]);
         }
 
-        // Funciones para manejar múltiples enlaces de audio
-        function addAudioLink() {
-            const container = document.getElementById('audioLinksContainer');
-            const newItem = document.createElement('div');
-            newItem.className = 'audio-link-item';
-            newItem.style.cssText = 'display: flex; gap: 10px; margin-bottom: 10px; align-items: center;';
-            newItem.innerHTML = `
-                <input type="url" class="audioUrl" placeholder="https://open.spotify.com/track/... o https://soundcloud.com/..." style="flex: 1;">
-                <button type="button" class="remove-audio-btn" onclick="removeAudioLink(this)" style="background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 18px;" title="Eliminar">✖️</button>
-            `;
-            container.appendChild(newItem);
-            updateRemoveButtons();
-        }
-
-        function removeAudioLink(button) {
-            const item = button.closest('.audio-link-item');
-            item.remove();
-            updateRemoveButtons();
-        }
-
-        function updateRemoveButtons() {
-            const items = document.querySelectorAll('.audio-link-item');
-            items.forEach((item, index) => {
-                const removeBtn = item.querySelector('.remove-audio-btn');
-                if (items.length > 1) {
-                    removeBtn.style.display = 'block';
-                } else {
-                    removeBtn.style.display = 'none';
-                }
-            });
-        }
-
-        function getAudioUrls() {
-            const inputs = document.querySelectorAll('.audioUrl');
-            const urls = [];
-            inputs.forEach(input => {
-                if (input.value.trim()) {
-                    urls.push(input.value.trim());
-                }
-            });
-            return urls;
-        }
-
         function showSuccess() {
             const msg = document.getElementById('successMessage');
             msg.classList.remove('hidden');
@@ -1979,6 +1944,16 @@
             ⚖️ Este código está protegido por copyright. Ver <a href="https://github.com/OMM2022/regalias-artisticas/blob/main/LICENSE" target="_blank" style="color: #667eea; text-decoration: none;">LICENSE</a> para términos de uso.
         </p>
     </footer>
+
+    <!-- Scripts modulares - Orden importante -->
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/audio-player.js"></script>
+    <script src="js/press-kit.js"></script>
+    <script src="js/qr-generator.js"></script>
+    <script src="js/ads.js"></script>
+    <script src="js/main.js"></script>
 
     <!-- Popunder Adsterra - Se activa con interacción del usuario -->
     <script type='text/javascript' src='//pl28021413.effectivegatecpm.com/1d/10/e5/1d10e55a751f630794821f867ea7fd84.js'></script>

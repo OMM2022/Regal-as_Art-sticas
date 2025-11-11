@@ -27,11 +27,19 @@ function switchTab(tabName) {
 }
 
 function openAdModal() {
-    document.getElementById('adModal').classList.add('active');
+    const modal = document.getElementById('adModal');
+    if (modal) {
+        modal.classList.add('active');
+    } else {
+        console.warn('⚠️ Modal de anuncios no encontrado');
+    }
 }
 
 function closeAdModal() {
-    document.getElementById('adModal').classList.remove('active');
+    const modal = document.getElementById('adModal');
+    if (modal) {
+        modal.classList.remove('active');
+    }
 }
 
 function closeAdModalOnBackdrop(event) {
@@ -41,11 +49,19 @@ function closeAdModalOnBackdrop(event) {
 }
 
 function openGlobalAdModal() {
-    document.getElementById('globalAdModal').classList.add('active');
+    const modal = document.getElementById('globalAdModal');
+    if (modal) {
+        modal.classList.add('active');
+    } else {
+        console.warn('⚠️ Modal global de anuncios no encontrado');
+    }
 }
 
 function closeGlobalAdModal() {
-    document.getElementById('globalAdModal').classList.remove('active');
+    const modal = document.getElementById('globalAdModal');
+    if (modal) {
+        modal.classList.remove('active');
+    }
 }
 
 function triggerPopunder() {
