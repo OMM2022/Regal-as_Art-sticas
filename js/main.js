@@ -196,49 +196,54 @@ window.addEventListener('DOMContentLoaded', () => {
     loadCardFromUrl();
     initAdsSystem();
     updateRemoveButtons();
-});
-
-// Manejo del formulario
-document.getElementById('songForm').addEventListener('submit', function(e) {
-    e.preventDefault();
     
-    cardData = {
-        songName: document.getElementById('songName').value,
-        artist: document.getElementById('artist').value,
-        description: document.getElementById('description').value,
-        audioUrls: getAudioUrls(),
-        profileImage: document.getElementById('profileImage').value,
-        facebook: document.getElementById('facebook').value,
-        twitter: document.getElementById('twitter').value,
-        instagram: document.getElementById('instagram').value,
-        tiktok: document.getElementById('tiktok').value,
-        youtube: document.getElementById('youtube').value,
-        // Press Kit
-        bioExtended: document.getElementById('bioExtended').value,
-        genre: document.getElementById('genre').value,
-        location: document.getElementById('location').value,
-        contactEmail: document.getElementById('contactEmail').value,
-        manager: document.getElementById('manager').value,
-        contactPhone: document.getElementById('contactPhone').value,
-        awards: document.getElementById('awards').value,
-        stats: document.getElementById('stats').value,
-        pressLinks: document.getElementById('pressLinks').value,
-        promoPhotos: document.getElementById('promoPhotos').value,
-        promoVideo: document.getElementById('promoVideo').value,
-        website: document.getElementById('website').value
-    };
+    // Manejo del formulario
+    const songForm = document.getElementById('songForm');
+    if (songForm) {
+        songForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            cardData = {
+                songName: document.getElementById('songName').value,
+                artist: document.getElementById('artist').value,
+                description: document.getElementById('description').value,
+                audioUrls: getAudioUrls(),
+                profileImage: document.getElementById('profileImage').value,
+                facebook: document.getElementById('facebook').value,
+                twitter: document.getElementById('twitter').value,
+                instagram: document.getElementById('instagram').value,
+                tiktok: document.getElementById('tiktok').value,
+                youtube: document.getElementById('youtube').value,
+                // Press Kit
+                bioExtended: document.getElementById('bioExtended').value,
+                genre: document.getElementById('genre').value,
+                location: document.getElementById('location').value,
+                contactEmail: document.getElementById('contactEmail').value,
+                manager: document.getElementById('manager').value,
+                contactPhone: document.getElementById('contactPhone').value,
+                awards: document.getElementById('awards').value,
+                stats: document.getElementById('stats').value,
+                pressLinks: document.getElementById('pressLinks').value,
+                promoPhotos: document.getElementById('promoPhotos').value,
+                promoVideo: document.getElementById('promoVideo').value,
+                website: document.getElementById('website').value
+            };
 
-    try {
-        generateCard();
-        generateQR();
-        generateCardUrl();
-        
-        document.getElementById('formSection').classList.add('hidden');
-        document.getElementById('cardResult').classList.remove('hidden');
-        
-        showSuccess();
-    } catch (error) {
-        console.error('Error al generar tarjeta:', error);
-        alert('Error: ' + error.message);
+            try {
+                generateCard();
+                generateQR();
+                generateCardUrl();
+                
+                document.getElementById('formSection').classList.add('hidden');
+                document.getElementById('cardResult').classList.remove('hidden');
+                
+                showSuccess();
+            } catch (error) {
+                console.error('Error al generar tarjeta:', error);
+                alert('Error: ' + error.message);
+            }
+        });
+    } else {
+        console.error('⚠️ No se encontró el formulario #songForm');
     }
 });
