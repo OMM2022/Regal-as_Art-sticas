@@ -135,8 +135,11 @@ function generateCardUrl() {
         console.warn('⚠️ La URL generada es muy larga (' + url.length + ' caracteres).');
     }
     
-    // Mostrar URL en el campo de compartir
-    document.getElementById('shareUrl').value = url;
+    // Mostrar URL en el campo de compartir (si existe)
+    const shareUrlField = document.getElementById('shareUrl');
+    if (shareUrlField) {
+        shareUrlField.value = url;
+    }
     
     return url;
 }
@@ -258,7 +261,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 generateQR();      // Luego generar QR con la URL
                 
                 document.getElementById('formSection').classList.add('hidden');
-                document.getElementById('cardResult').classList.remove('hidden');
+                document.getElementById('previewSection').classList.remove('hidden');
                 
                 showSuccess();
                 console.log('✅ Tarjeta generada exitosamente');

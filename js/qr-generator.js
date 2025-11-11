@@ -7,7 +7,8 @@ function generateQR() {
     const qrcodeContainer = document.getElementById('qrcode');
     qrcodeContainer.innerHTML = ''; // Limpiar QR anterior
     
-    const cardUrl = document.getElementById('shareUrl').value;
+    // Obtener la URL generada de la tarjeta
+    const cardUrl = generateCardUrl();
     
     if (typeof QRCode === 'undefined') {
         qrcodeContainer.innerHTML = '<p style="color: red;">Error: Biblioteca QRCode no cargada. Por favor, recarga la página.</p>';
