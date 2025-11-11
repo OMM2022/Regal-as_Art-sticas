@@ -24,7 +24,7 @@ function generateQR() {
         correctLevel: QRCode.CorrectLevel.H
     });
     
-    document.getElementById('qrSection').classList.remove('hidden');
+    console.log('✅ Código QR generado exitosamente');
 }
 
 function downloadCardImage() {
