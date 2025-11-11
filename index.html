@@ -34,13 +34,973 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Regalías Directas - Crea tu Tarjeta Musical</title>
-    
-    <!-- CSS Externo -->
-    <link rel="stylesheet" href="css/styles.css">
-    
-    <!-- Librerías externas -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden; /* Evita scroll horizontal */
+            transition: background 0.3s ease;
+        }
+
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        .dark-mode .card {
+            background: #0f3460;
+            color: #e0e0e0;
+        }
+
+        .dark-mode .info-box {
+            background: #1a1a2e;
+            border-left-color: #667eea;
+        }
+
+        .dark-mode .info-box h3 {
+            color: #667eea;
+        }
+
+        .dark-mode .info-box p {
+            color: #b0b0b0;
+        }
+
+        .dark-mode a {
+            color: #e0e0e0 !important;
+        }
+
+        .dark-mode code {
+            background: #1a1a2e !important;
+            color: #667eea !important;
+        }
+
+        .dark-mode input,
+        .dark-mode textarea,
+        .dark-mode select {
+            background: #1a1a2e;
+            color: #e0e0e0;
+            border-color: #667eea;
+        }
+
+        .dark-mode label {
+            color: #e0e0e0;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            padding: 8px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255,255,255,0.3);
+            transform: rotate(180deg) scale(1.1);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%; /* Asegura que use todo el ancho disponible */
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border 0.3s;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border 0.3s;
+            background: white;
+            cursor: pointer;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .music-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 15px;
+            padding: 25px;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .music-card h2 {
+            margin-bottom: 10px;
+            font-size: 1.8em;
+        }
+
+        .music-card .artist {
+            opacity: 0.9;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .music-card .description {
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        /* Responsive multimedia */
+        iframe, audio, video {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .player-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .player-controls button {
+            flex: 1;
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        .ad-container {
+            background: rgba(255,255,255,0.2);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ad-placeholder {
+            color: rgba(255,255,255,0.7);
+            font-style: italic;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .actions button {
+            flex: 1;
+        }
+
+        .qr-container {
+            text-align: center;
+            padding: 20px;
+        }
+
+        #qrcode {
+            display: inline-block;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .success-message {
+            background: #4caf50;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .info-box h3 {
+            color: #1976d2;
+            margin-bottom: 8px;
+        }
+
+        .info-box p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 5px;
+        }
+
+        .developer-ad {
+            background: rgba(0,0,0,0.1);
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 15px;
+            text-align: center;
+            font-size: 0.85em;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .developer-ad-content {
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .social-share {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .social-share button {
+            flex: 1;
+            min-width: 120px;
+            padding: 10px 15px;
+            font-size: 14px;
+        }
+
+        .download-image-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            margin-top: 10px;
+        }
+
+        .view-counter {
+            background: rgba(255,255,255,0.2);
+            padding: 10px 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 0.9em;
+            backdrop-filter: blur(10px);
+        }
+
+        .view-counter strong {
+            font-size: 1.2em;
+            color: #FFD700;
+        }
+
+        /* Pestañas de navegación */
+        .tabs-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tab-button {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            width: auto;
+        }
+
+        .tab-button:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .tab-button.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: white;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Estilos para MonetizaPro */
+        .monetiza-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .platform-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .platform-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.2);
+            border-color: #667eea;
+        }
+
+        .platform-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .platform-card .badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.75em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .platform-card .badge.premium {
+            background: #f5576c;
+        }
+
+        .platform-card .badge.recommended {
+            background: #27ae60;
+        }
+
+        .step-list {
+            background: rgba(255,255,255,0.05);
+            border-left: 3px solid #667eea;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .step-list li {
+            margin: 8px 0;
+            padding-left: 10px;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .comparison-table th {
+            background: rgba(102, 126, 234, 0.2);
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .comparison-table tr:hover {
+            background: rgba(255,255,255,0.03);
+        }
+
+        /* Estilos para Acerca de */
+        .profile-container {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .profile-image-wrapper {
+            flex: 0 0 300px;
+            position: relative;
+        }
+
+        .profile-image {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+            border: 4px solid rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .profile-image:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(102, 126, 234, 0.6);
+        }
+
+        .profile-content {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .skill-badge {
+            background: linear-gradient(135deg, rgba(102,126,234,0.2) 0%, rgba(118,75,162,0.2) 100%);
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(102,126,234,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .skill-badge:hover {
+            transform: scale(1.05);
+            border-color: #667eea;
+            background: linear-gradient(135deg, rgba(102,126,234,0.3) 0%, rgba(118,75,162,0.3) 100%);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .tech-badge {
+            display: inline-block;
+            background: rgba(102,126,234,0.15);
+            color: #667eea;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            margin: 3px;
+            border: 1px solid rgba(102,126,234,0.3);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+                margin-bottom: 20px;
+            }
+
+            .container {
+                max-width: 100%;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .music-card {
+                padding: 20px;
+            }
+
+            .music-card h2 {
+                font-size: 1.5em;
+            }
+
+            .music-card .artist {
+                font-size: 1em;
+            }
+
+            .form-group {
+                margin-bottom: 15px;
+            }
+
+            input, textarea, select {
+                font-size: 16px; /* Evita zoom en iOS */
+            }
+
+            button {
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            .actions button {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .player-controls {
+                flex-direction: column;
+            }
+
+            .player-controls button {
+                margin-bottom: 8px;
+            }
+
+            .info-box {
+                padding: 12px;
+                font-size: 0.9em;
+            }
+
+            .info-box h3 {
+                font-size: 1.1em;
+            }
+
+            #qrcode {
+                padding: 10px;
+            }
+
+            #qrcode canvas, #qrcode img {
+                max-width: 100% !important;
+                height: auto !important;
+            }
+
+            .qr-container h2 {
+                font-size: 1.3em;
+            }
+
+            .ad-container {
+                min-height: 80px;
+                padding: 10px;
+            }
+
+            .developer-ad {
+                padding: 8px;
+                font-size: 0.8em;
+            }
+        }
+
+        /* Tablets */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .container {
+                max-width: 700px;
+            }
+
+            h1 {
+                font-size: 2.2em;
+            }
+
+            .card {
+                padding: 25px;
+            }
+
+            .music-card h2 {
+                font-size: 1.6em;
+            }
+        }
+
+        /* Estilos del Modal de Anuncios */
+        .ad-modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .ad-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ad-modal-content {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            animation: slideDown 0.4s ease;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            color: white;
+        }
+
+        .dark-mode .ad-modal-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .ad-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .ad-modal-header h3 {
+            margin: 0;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ad-modal-close {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            padding: 0;
+        }
+
+        .ad-modal-close:hover {
+            background: rgba(255,255,255,0.3);
+            transform: rotate(90deg);
+        }
+
+        .ad-modal-body {
+            background: rgba(255,255,255,0.15);
+            border-radius: 12px;
+            padding: 20px;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            backdrop-filter: blur(5px);
+        }
+
+        .ad-modal-footer {
+            text-align: center;
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        .ad-modal-trigger {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            color: #333;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        /* Estilos para guía de plataformas */
+        .platform-guide {
+            background: linear-gradient(135deg, rgba(39, 174, 96, 0.1) 0%, rgba(46, 204, 113, 0.1) 100%);
+            border-left: 4px solid #27ae60;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .platform-guide h4 {
+            color: #27ae60;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .dark-mode .platform-guide h4 {
+            color: #2ecc71;
+        }
+
+        .platform-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .platform-card {
+            background: rgba(255,255,255,0.5);
+            padding: 15px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .dark-mode .platform-card {
+            background: rgba(26, 26, 46, 0.5);
+        }
+
+        .platform-card:hover {
+            background: rgba(255,255,255,0.8);
+            transform: translateY(-3px);
+        }
+
+        .dark-mode .platform-card:hover {
+            background: rgba(26, 26, 46, 0.8);
+        }
+
+        .platform-card strong {
+            color: #667eea;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .platform-card small {
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .dark-mode .platform-card small {
+            color: #b0b0b0;
+        }
+
+        .ad-modal-trigger {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            color: #333;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 15px;
+            width: 100%;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+        }
+
+        .ad-modal-trigger:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.6);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .ad-modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+
+            .ad-modal-header h3 {
+                font-size: 1.2em;
+            }
+
+            .ad-modal-close {
+                width: 35px;
+                height: 35px;
+                font-size: 24px;
+            }
+
+            .ad-modal-body {
+                padding: 15px;
+                min-height: 120px;
+            }
+        }
+
+        /* Banner de Referido Adsterra */
+        .adsterra-referral-banner {
+            text-align: center;
+            margin: 30px auto;
+            padding: 20px 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            max-width: 750px;
+        }
+
+        .adsterra-referral-banner a {
+            display: inline-block;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .adsterra-referral-banner a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .adsterra-referral-banner img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .dark-mode .adsterra-referral-banner {
+            background: rgba(102,126,234,0.1);
+        }
+
+        /* Móviles pequeños */
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5em;
+            }
+
+            .music-card h2 {
+                font-size: 1.3em;
+            }
+
+            .music-card .artist {
+                font-size: 0.9em;
+            }
+
+            .music-card .description {
+                font-size: 0.9em;
+            }
+
+            button {
+                font-size: 13px;
+                padding: 10px 15px;
+            }
+
+            .info-box p {
+                font-size: 0.85em;
+            }
+
+            iframe {
+                max-width: 100% !important;
+            }
+        }
+
+        /* Landscape mobile */
+        @media (max-height: 500px) and (orientation: landscape) {
+            h1 {
+                font-size: 1.5em;
+                margin-bottom: 15px;
+            }
+
+            .card {
+                padding: 15px;
+            }
+
+            .music-card {
+                padding: 15px;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Botón de Cambio de Tema -->
@@ -770,6 +1730,7 @@
         </div>
     </div>
 
+
     <!-- JavaScript modular -->
     <script src="js/config.js"></script>
     <script src="js/utils.js"></script>
@@ -779,1219 +1740,6 @@
     <script src="js/qr-generator.js"></script>
     <script src="js/ads.js"></script>
     <script src="js/main.js"></script>
-    
-    <script>
-        console.log('🎵 Todos los módulos cargados correctamente');
-        
-        // ⚙️ CONFIGURACIÓN DEL DESARROLLADOR - TU MONETIZACIÓN
-        // Pega aquí tu código publicitario (Google AdSense, A-Ads, etc.)
-        const DEVELOPER_AD_CODE = `
-            <!-- A-Ads Async Code -->
-            <iframe data-aa='2392933' src='//ad.a-ads.com/2392933?size=320x50' style='width:320px; height:50px; border:0px; padding:0; overflow:hidden; background-color: transparent;'></iframe>
-        `;
-        // Cambia "false" a "true" si quieres ocultar la publicidad durante pruebas
-        const HIDE_DEVELOPER_AD = false;
-        // ⚙️ FIN DE CONFIGURACIÓN
-        
-        // Verificar que QRCode esté disponible
-        window.addEventListener('load', function() {
-            if (typeof QRCode === 'undefined') {
-                console.error('⚠️ Librería QRCode no se cargó correctamente');
-                alert('Error: No se pudo cargar la librería de códigos QR. Por favor, recarga la página.');
-            } else {
-                console.log('✅ Librería QRCode cargada correctamente');
-            }
-        });
-        
-        let currentAudio = null;
-        let cardData = null;
-        let viewCount = 0;
-
-        // Cargar tema guardado
-        if (localStorage.getItem('darkMode') === 'true') {
-            document.body.classList.add('dark-mode');
-        }
-
-        // Función para cambiar tema
-        function toggleTheme() {
-            document.body.classList.toggle('dark-mode');
-            const isDark = document.body.classList.contains('dark-mode');
-            localStorage.setItem('darkMode', isDark);
-            console.log('Tema cambiado a:', isDark ? 'oscuro' : 'claro');
-        }
-
-        // Funciones para controlar el modal de anuncios
-        function openAdModal() {
-            const modal = document.getElementById('adModal');
-            if (modal) {
-                modal.classList.add('active');
-                document.body.style.overflow = 'hidden'; // Prevenir scroll del body
-            }
-        }
-
-        function closeAdModal() {
-            const modal = document.getElementById('adModal');
-            if (modal) {
-                modal.classList.remove('active');
-                document.body.style.overflow = ''; // Restaurar scroll
-            }
-        }
-
-        function closeAdModalOnBackdrop(event) {
-            // Cerrar solo si se hace clic en el fondo oscuro, no en el contenido
-            if (event.target.id === 'adModal' || event.target.id === 'globalAdModal') {
-                closeAdModal();
-                closeGlobalAdModal();
-            }
-        }
-
-        // Funciones para el modal global
-        function openGlobalAdModal() {
-            const modal = document.getElementById('globalAdModal');
-            if (modal) {
-                modal.classList.add('active');
-                document.body.style.overflow = 'hidden';
-                
-                // Registrar que se mostró el modal
-                adModalState.timesShown++;
-                adModalState.dailyShows++;
-                adModalState.lastShownTime = Date.now();
-                saveAdModalState();
-            }
-        }
-
-        function closeGlobalAdModal() {
-            const modal = document.getElementById('globalAdModal');
-            if (modal) {
-                modal.classList.remove('active');
-                document.body.style.overflow = '';
-                
-                // Activar Popunder de Adsterra cuando el usuario cierra el modal
-                // Solo se activa una vez por sesión para no molestar
-                if (!sessionStorage.getItem('popunderShown')) {
-                    sessionStorage.setItem('popunderShown', 'true');
-                    // El script de popunder se carga dinámicamente
-                    triggerPopunder();
-                }
-            }
-        }
-
-        // Función para activar el Popunder de Adsterra
-        function triggerPopunder() {
-            // Verificar que no se haya activado ya
-            if (window.popunderActivated) return;
-            window.popunderActivated = true;
-            
-            // Crear y cargar el script de Popunder
-            const script = document.createElement('script');
-            script.type = 'text/javascript';
-            script.src = '//pl28021413.effectivegatecpm.com/1d/10/e5/1d10e55a751f630794821f867ea7fd84.js';
-            script.async = true;
-            document.head.appendChild(script);
-            
-            console.log('💰 Popunder de Adsterra activado');
-        }
-
-        // ⚙️ CONFIGURACIÓN DEL SISTEMA INTELIGENTE DE MODAL
-        const MODAL_CONFIG = {
-            FIRST_DELAY: 10000,           // Primera aparición: 10 segundos
-            MIN_INTERVAL: 90000,          // Mínimo 90 segundos entre modales
-            MAX_SHOWS_PER_SESSION: 4,    // Máximo 4 veces por sesión
-            TABS_BETWEEN_SHOWS: 3,       // Mostrar cada 3 cambios de pestaña
-            RESET_AFTER_HOURS: 24        // Resetear contador después de 24 horas
-        };
-
-        // Estado del modal (se guarda en localStorage)
-        let adModalState = {
-            timesShown: 0,
-            lastShownTime: 0,
-            tabChanges: 0,
-            firstVisit: Date.now(),
-            dailyShows: 0,
-            lastResetDate: new Date().toDateString()
-        };
-
-        // Cargar estado desde localStorage
-        function loadAdModalState() {
-            const saved = localStorage.getItem('adModalState');
-            if (saved) {
-                try {
-                    const parsed = JSON.parse(saved);
-                    const today = new Date().toDateString();
-                    
-                    // Resetear si es un nuevo día
-                    if (parsed.lastResetDate !== today) {
-                        adModalState.dailyShows = 0;
-                        adModalState.lastResetDate = today;
-                        adModalState.timesShown = 0;
-                    } else {
-                        adModalState = parsed;
-                    }
-                } catch (e) {
-                    console.log('Error cargando estado del modal:', e);
-                }
-            }
-        }
-
-        // Guardar estado en localStorage
-        function saveAdModalState() {
-            localStorage.setItem('adModalState', JSON.stringify(adModalState));
-        }
-
-        // Verificar si se puede mostrar el modal
-        function canShowModal() {
-            const now = Date.now();
-            const timeSinceLastShow = now - adModalState.lastShownTime;
-            
-            // Condiciones para NO mostrar:
-            if (adModalState.timesShown >= MODAL_CONFIG.MAX_SHOWS_PER_SESSION) {
-                console.log('📊 Modal: Límite de sesión alcanzado');
-                return false;
-            }
-            
-            if (timeSinceLastShow < MODAL_CONFIG.MIN_INTERVAL) {
-                console.log('📊 Modal: Esperando intervalo mínimo');
-                return false;
-            }
-            
-            if (adModalState.dailyShows >= MODAL_CONFIG.MAX_SHOWS_PER_SESSION * 2) {
-                console.log('📊 Modal: Límite diario alcanzado');
-                return false;
-            }
-            
-            return true;
-        }
-
-        // Intentar mostrar el modal
-        function tryShowModal() {
-            if (canShowModal()) {
-                openGlobalAdModal();
-                console.log('✅ Modal mostrado. Total sesión:', adModalState.timesShown);
-                return true;
-            }
-            return false;
-        }
-
-        // Cargar estado al iniciar
-        loadAdModalState();
-
-        // Primera aparición automática (10 segundos)
-        setTimeout(() => {
-            if (adModalState.timesShown === 0) {
-                tryShowModal();
-            }
-        }, MODAL_CONFIG.FIRST_DELAY);
-
-        // Función para cambiar entre pestañas (con sistema inteligente)
-        function switchTab(tabName) {
-            // Ocultar todas las pestañas
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            
-            // Desactivar todos los botones
-            document.querySelectorAll('.tab-button').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            // Activar la pestaña seleccionada
-            document.getElementById(tabName + '-tab').classList.add('active');
-            
-            // Activar el botón correspondiente
-            event.target.classList.add('active');
-            
-            // Scroll al inicio
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            
-            // Sistema inteligente: Contar cambios de pestaña
-            adModalState.tabChanges++;
-            
-            // Mostrar modal cada X cambios de pestaña
-            if (adModalState.tabChanges >= MODAL_CONFIG.TABS_BETWEEN_SHOWS) {
-                adModalState.tabChanges = 0; // Resetear contador
-                
-                // Intentar mostrar modal después de un pequeño delay
-                setTimeout(() => {
-                    tryShowModal();
-                }, 2000); // 2 segundos después de cambiar de pestaña
-            }
-            
-            saveAdModalState();
-        }
-
-        // Incrementar contador de vistas
-        function incrementViewCount() {
-            const params = new URLSearchParams(window.location.search);
-            const cardId = params.get('id') || 'preview';
-            const key = `views_${cardId}`;
-            
-            viewCount = parseInt(localStorage.getItem(key) || '0') + 1;
-            localStorage.setItem(key, viewCount);
-            
-            const viewCountEl = document.getElementById('viewCount');
-            if (viewCountEl) {
-                viewCountEl.textContent = viewCount;
-            }
-        }
-
-        // Descargar tarjeta como imagen
-        async function downloadCardImage() {
-            try {
-                const cardElement = document.querySelector('.music-card');
-                if (!cardElement) {
-                    alert('No hay tarjeta para descargar');
-                    return;
-                }
-
-                // Usar html2canvas con configuración mejorada
-                if (typeof html2canvas !== 'undefined') {
-                    // Mostrar mensaje de carga
-                    const loadingMsg = document.createElement('div');
-                    loadingMsg.textContent = '📸 Generando imagen...';
-                    loadingMsg.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.8); color: white; padding: 20px 40px; border-radius: 10px; z-index: 10000; font-size: 18px;';
-                    document.body.appendChild(loadingMsg);
-
-                    // Configuración optimizada para captura completa
-                    const canvas = await html2canvas(cardElement, {
-                        backgroundColor: null, // Mantiene el fondo transparente/original
-                        scale: 3, // Mayor calidad (era 2)
-                        useCORS: true, // Permite cargar recursos externos
-                        allowTaint: true, // Permite elementos externos
-                        logging: false, // Sin logs en consola
-                        width: cardElement.scrollWidth, // Captura ancho completo
-                        height: cardElement.scrollHeight, // Captura alto completo
-                        windowWidth: cardElement.scrollWidth,
-                        windowHeight: cardElement.scrollHeight,
-                        onclone: (clonedDoc) => {
-                            // Asegurar que el elemento clonado tenga el tamaño correcto
-                            const clonedCard = clonedDoc.querySelector('.music-card');
-                            if (clonedCard) {
-                                clonedCard.style.maxWidth = 'none';
-                                clonedCard.style.width = cardElement.scrollWidth + 'px';
-                                clonedCard.style.height = 'auto';
-                                
-                                // Reemplazar iframes con mensajes visuales mejorados
-                                const iframes = clonedCard.querySelectorAll('iframe');
-                                iframes.forEach(iframe => {
-                                    const placeholder = clonedDoc.createElement('div');
-                                    placeholder.style.cssText = `
-                                        background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
-                                        border: 2px solid rgba(102, 126, 234, 0.3);
-                                        border-radius: 15px;
-                                        padding: 40px 30px;
-                                        text-align: center;
-                                        margin-bottom: 20px;
-                                        min-height: 180px;
-                                        display: flex;
-                                        align-items: center;
-                                        justify-content: center;
-                                        flex-direction: column;
-                                        backdrop-filter: blur(10px);
-                                    `;
-                                    
-                                    // Detectar tipo de plataforma para mostrar logo/texto apropiado
-                                    const audioUrl = cardData.audioUrl.toLowerCase();
-                                    let platformIcon = '🎵';
-                                    let platformName = 'Reproductor de Audio';
-                                    
-                                    if (audioUrl.includes('spotify')) {
-                                        platformIcon = '🎧';
-                                        platformName = 'Spotify';
-                                    } else if (audioUrl.includes('soundcloud')) {
-                                        platformIcon = '☁️';
-                                        platformName = 'SoundCloud';
-                                    } else if (audioUrl.includes('youtube')) {
-                                        platformIcon = '▶️';
-                                        platformName = 'YouTube';
-                                    } else if (audioUrl.includes('anchor')) {
-                                        platformIcon = '⚓';
-                                        platformName = 'Anchor';
-                                    } else if (audioUrl.includes('spreaker')) {
-                                        platformIcon = '📻';
-                                        platformName = 'Spreaker';
-                                    }
-                                    
-                                    placeholder.innerHTML = `
-                                        <div style="font-size: 72px; margin-bottom: 15px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));">${platformIcon}</div>
-                                        <div style="font-size: 20px; font-weight: 700; color: #667eea; margin-bottom: 8px; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">${platformName}</div>
-                                        <div style="font-size: 15px; font-weight: 600; color: #764ba2; margin-bottom: 12px;">🎵 ${escapeHtml(cardData.songName)}</div>
-                                        <div style="font-size: 13px; opacity: 0.85; color: #555; background: rgba(255,255,255,0.6); padding: 8px 16px; border-radius: 20px; margin-top: 10px;">
-                                            📱 Escanea el QR para escuchar
-                                        </div>
-                                    `;
-                                    iframe.parentNode.replaceChild(placeholder, iframe);
-                                });
-                                
-                                // Ocultar botones de modal si existen (no tienen sentido en imagen estática)
-                                const modalButtons = clonedCard.querySelectorAll('.ad-modal-trigger');
-                                modalButtons.forEach(btn => btn.style.display = 'none');
-                            }
-                        }
-                    });
-                    
-                    // Remover mensaje de carga
-                    document.body.removeChild(loadingMsg);
-                    
-                    // Descargar imagen
-                    const link = document.createElement('a');
-                    link.download = `${cardData.songName.replace(/[^a-z0-9]/gi, '_')}-tarjeta.png`;
-                    link.href = canvas.toDataURL('image/png', 1.0); // Máxima calidad
-                    link.click();
-                } else {
-                    alert('Para descargar como imagen, necesitas la librería html2canvas. Por ahora, puedes hacer captura de pantalla.');
-                }
-            } catch (error) {
-                console.error('Error al descargar imagen:', error);
-                alert('Error al generar imagen. Puedes hacer captura de pantalla de la tarjeta.');
-            }
-        }
-
-        // Compartir en Twitter
-        function shareTwitter() {
-            const url = generateCardUrl();
-            const text = `🎵 ${cardData.songName} - ${cardData.artist}\n¡Escucha mi música!`;
-            const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
-            window.open(twitterUrl, '_blank');
-        }
-
-        // Compartir en Facebook
-        function shareFacebook() {
-            const url = generateCardUrl();
-            const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
-            window.open(facebookUrl, '_blank');
-        }
-
-        // Compartir en WhatsApp
-        function shareWhatsApp() {
-            const url = generateCardUrl();
-            const text = `🎵 ${cardData.songName} - ${cardData.artist}\n¡Escucha mi música!\n${url}`;
-            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text)}`;
-            window.open(whatsappUrl, '_blank');
-        }
-
-        // Copiar link para compartir
-        function copyShareLink() {
-            const url = generateCardUrl();
-            navigator.clipboard.writeText(url).then(() => {
-                showSuccess('¡Link copiado al portapapeles!');
-            }).catch(err => {
-                alert('Error al copiar: ' + err);
-            });
-        }
-
-        // Actualizar showSuccess para mensajes personalizados
-        function showSuccess(message = '✅ ¡Código copiado al portapapeles!') {
-            const msg = document.getElementById('successMessage');
-            msg.textContent = message;
-            msg.classList.remove('hidden');
-            setTimeout(() => msg.classList.add('hidden'), 3000);
-        }
-
-        // Procesar el formulario
-        document.getElementById('songForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            console.log('Formulario enviado'); // Debug
-            
-            cardData = {
-                songName: document.getElementById('songName').value,
-                artist: document.getElementById('artist').value,
-                description: document.getElementById('description').value,
-                audioUrls: getAudioUrls(), // Array de URLs
-                adsCode: '', // Ya no se usa, siempre vacío
-                profileImage: document.getElementById('profileImage').value,
-                facebook: document.getElementById('facebook').value,
-                twitter: document.getElementById('twitter').value,
-                instagram: document.getElementById('instagram').value,
-                tiktok: document.getElementById('tiktok').value,
-                youtube: document.getElementById('youtube').value,
-                // Press Kit fields
-                bioExtended: document.getElementById('bioExtended').value,
-                genre: document.getElementById('genre').value,
-                location: document.getElementById('location').value,
-                contactEmail: document.getElementById('contactEmail').value,
-                manager: document.getElementById('manager').value,
-                contactPhone: document.getElementById('contactPhone').value,
-                awards: document.getElementById('awards').value,
-                stats: document.getElementById('stats').value,
-                pressLinks: document.getElementById('pressLinks').value,
-                promoPhotos: document.getElementById('promoPhotos').value,
-                promoVideo: document.getElementById('promoVideo').value,
-                website: document.getElementById('website').value
-            };
-
-            console.log('Datos de la tarjeta:', cardData); // Debug
-
-            try {
-                generateCard();
-                generateQR();
-                
-                document.getElementById('formSection').classList.add('hidden');
-                document.getElementById('previewSection').classList.remove('hidden');
-                
-                console.log('Tarjeta generada exitosamente'); // Debug
-            } catch (error) {
-                console.error('Error al generar tarjeta:', error);
-                alert('Error: ' + error.message);
-            }
-        });
-
-        function generateCard() {
-            const preview = document.getElementById('musicCardPreview');
-            
-            // Generar reproductores para cada URL de audio
-            let audioPlayersHTML = '';
-            if (cardData.audioUrls && cardData.audioUrls.length > 0) {
-                audioPlayersHTML = cardData.audioUrls.map((url, index) => {
-                    return generateAudioPlayer(url);
-                }).join('');
-            }
-            
-            // Publicidad del desarrollador (solo si no está oculta)
-            const devAd = HIDE_DEVELOPER_AD ? '' : `
-                <div class="developer-ad">
-                    <div class="developer-ad-content">
-                        ${DEVELOPER_AD_CODE}
-                    </div>
-                </div>
-            `;
-            
-            // Foto de perfil (si existe)
-            const profileImageHTML = cardData.profileImage ? `
-                <div style="text-align: center; margin-bottom: 20px;">
-                    <img src="${escapeHtml(cardData.profileImage)}" 
-                         alt="Foto de perfil" 
-                         style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 4px solid rgba(255,255,255,0.3); box-shadow: 0 4px 15px rgba(0,0,0,0.2);"
-                         onerror="this.style.display='none'">
-                </div>
-            ` : '';
-            
-            // Redes sociales (solo mostrar las que tengan URL)
-            const socialLinks = [];
-            
-            if (cardData.facebook) {
-                socialLinks.push(`<a href="${escapeHtml(cardData.facebook)}" target="_blank" rel="noopener noreferrer" style="color: white; text-decoration: none; padding: 8px 15px; background: linear-gradient(135deg, #1877f2 0%, #0c63d4 100%); border-radius: 8px; display: inline-flex; align-items: center; gap: 6px; font-size: 14px; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">📘 Meta</a>`);
-            }
-            
-            if (cardData.twitter) {
-                socialLinks.push(`<a href="${escapeHtml(cardData.twitter)}" target="_blank" rel="noopener noreferrer" style="color: white; text-decoration: none; padding: 8px 15px; background: linear-gradient(135deg, #000000 0%, #333333 100%); border-radius: 8px; display: inline-flex; align-items: center; gap: 6px; font-size: 14px; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">✖️ X</a>`);
-            }
-            
-            if (cardData.instagram) {
-                socialLinks.push(`<a href="${escapeHtml(cardData.instagram)}" target="_blank" rel="noopener noreferrer" style="color: white; text-decoration: none; padding: 8px 15px; background: linear-gradient(135deg, #833ab4 0%, #fd1d1d 50%, #fcb045 100%); border-radius: 8px; display: inline-flex; align-items: center; gap: 6px; font-size: 14px; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">📸 Instagram</a>`);
-            }
-            
-            if (cardData.tiktok) {
-                socialLinks.push(`<a href="${escapeHtml(cardData.tiktok)}" target="_blank" rel="noopener noreferrer" style="color: white; text-decoration: none; padding: 8px 15px; background: linear-gradient(135deg, #000000 0%, #ee1d52 100%); border-radius: 8px; display: inline-flex; align-items: center; gap: 6px; font-size: 14px; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">🎵 TikTok</a>`);
-            }
-            
-            if (cardData.youtube) {
-                socialLinks.push(`<a href="${escapeHtml(cardData.youtube)}" target="_blank" rel="noopener noreferrer" style="color: white; text-decoration: none; padding: 8px 15px; background: linear-gradient(135deg, #ff0000 0%, #cc0000 100%); border-radius: 8px; display: inline-flex; align-items: center; gap: 6px; font-size: 14px; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">▶️ YouTube</a>`);
-            }
-            
-            const socialLinksHTML = socialLinks.length > 0 ? `
-                <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 20px; margin-bottom: 20px;">
-                    ${socialLinks.join('')}
-                </div>
-            ` : '';
-            
-            // Press Kit Section
-            let pressKitHTML = '';
-            const hasPressKit = cardData.bioExtended || cardData.genre || cardData.location || 
-                               cardData.contactEmail || cardData.manager || cardData.contactPhone ||
-                               cardData.awards || cardData.stats || cardData.pressLinks || 
-                               cardData.promoPhotos || cardData.promoVideo || cardData.website;
-            
-            if (hasPressKit) {
-                pressKitHTML = `
-                    <div style="background: rgba(255,255,255,0.05); border-radius: 12px; padding: 20px; margin-top: 30px;">
-                        <h3 style="color: #667eea; margin-bottom: 15px; text-align: center; font-size: 1.3em;">📋 Press Kit</h3>
-                        
-                        ${cardData.bioExtended ? `
-                            <div style="margin-bottom: 20px;">
-                                <h4 style="color: #667eea; margin-bottom: 8px; font-size: 1em;">📖 Biografía</h4>
-                                <p style="color: #ddd; line-height: 1.6; white-space: pre-wrap;">${escapeHtml(cardData.bioExtended)}</p>
-                            </div>
-                        ` : ''}
-                        
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
-                            ${cardData.genre ? `
-                                <div>
-                                    <h4 style="color: #667eea; margin-bottom: 5px; font-size: 0.9em;">🎸 Género</h4>
-                                    <p style="color: #ddd;">${escapeHtml(cardData.genre)}</p>
-                                </div>
-                            ` : ''}
-                            
-                            ${cardData.location ? `
-                                <div>
-                                    <h4 style="color: #667eea; margin-bottom: 5px; font-size: 0.9em;">📍 Ubicación</h4>
-                                    <p style="color: #ddd;">${escapeHtml(cardData.location)}</p>
-                                </div>
-                            ` : ''}
-                            
-                            ${cardData.website ? `
-                                <div>
-                                    <h4 style="color: #667eea; margin-bottom: 5px; font-size: 0.9em;">🌐 Website</h4>
-                                    <a href="${escapeHtml(cardData.website)}" target="_blank" rel="noopener noreferrer" style="color: #667eea; text-decoration: none;">Visitar sitio oficial</a>
-                                </div>
-                            ` : ''}
-                        </div>
-                        
-                        ${cardData.awards ? `
-                            <div style="margin-bottom: 20px;">
-                                <h4 style="color: #667eea; margin-bottom: 8px; font-size: 1em;">🏆 Premios y Reconocimientos</h4>
-                                <p style="color: #ddd; line-height: 1.6; white-space: pre-wrap;">${escapeHtml(cardData.awards)}</p>
-                            </div>
-                        ` : ''}
-                        
-                        ${cardData.stats ? `
-                            <div style="margin-bottom: 20px;">
-                                <h4 style="color: #667eea; margin-bottom: 8px; font-size: 1em;">📊 Estadísticas</h4>
-                                <p style="color: #ddd; line-height: 1.6; white-space: pre-wrap;">${escapeHtml(cardData.stats)}</p>
-                            </div>
-                        ` : ''}
-                        
-                        ${cardData.promoVideo ? `
-                            <div style="margin-bottom: 20px;">
-                                <h4 style="color: #667eea; margin-bottom: 8px; font-size: 1em;">🎬 Video Promocional</h4>
-                                ${generateVideoPlayer(cardData.promoVideo)}
-                            </div>
-                        ` : ''}
-                        
-                        ${cardData.pressLinks ? `
-                            <div style="margin-bottom: 20px;">
-                                <h4 style="color: #667eea; margin-bottom: 8px; font-size: 1em;">📰 Prensa</h4>
-                                <div style="display: flex; flex-direction: column; gap: 8px;">
-                                    ${cardData.pressLinks.split('\n').filter(l => l.trim()).map(link => 
-                                        `<a href="${escapeHtml(link.trim())}" target="_blank" rel="noopener noreferrer" style="color: #667eea; text-decoration: none;">🔗 ${escapeHtml(link.trim())}</a>`
-                                    ).join('')}
-                                </div>
-                            </div>
-                        ` : ''}
-                        
-                        ${cardData.promoPhotos ? `
-                            <div style="margin-bottom: 20px;">
-                                <h4 style="color: #667eea; margin-bottom: 8px; font-size: 1em;">🖼️ Fotos Promocionales</h4>
-                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px;">
-                                    ${cardData.promoPhotos.split('\n').filter(p => p.trim()).map(photo => 
-                                        `<img src="${escapeHtml(photo.trim())}" alt="Foto promocional" style="width: 100%; height: 150px; object-fit: cover; border-radius: 8px;" onerror="this.style.display='none'">`
-                                    ).join('')}
-                                </div>
-                            </div>
-                        ` : ''}
-                        
-                        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
-                            <h4 style="color: #667eea; margin-bottom: 10px; font-size: 1em;">📞 Contacto</h4>
-                            <div style="display: flex; flex-direction: column; gap: 8px; color: #ddd;">
-                                ${cardData.contactEmail ? `<div>📧 <a href="mailto:${escapeHtml(cardData.contactEmail)}" style="color: #667eea; text-decoration: none;">${escapeHtml(cardData.contactEmail)}</a></div>` : ''}
-                                ${cardData.contactPhone ? `<div>📞 ${escapeHtml(cardData.contactPhone)}</div>` : ''}
-                                ${cardData.manager ? `<div>👤 Manager: ${escapeHtml(cardData.manager)}</div>` : ''}
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }
-            
-            // Botón para abrir modal de anuncios (solo si hay anuncios del usuario)
-            const adTriggerButton = cardData.adsCode ? `
-                <button class="ad-modal-trigger" onclick="openAdModal()">
-                    💰 Ver Mensaje Patrocinado
-                </button>
-            ` : '';
-            
-            preview.innerHTML = `
-                <div class="music-card">
-                    ${profileImageHTML}
-                    <h2>${escapeHtml(cardData.songName)}</h2>
-                    <div class="artist">Por ${escapeHtml(cardData.artist)}</div>
-                    ${cardData.description ? `<div class="description">${escapeHtml(cardData.description)}</div>` : ''}
-                    
-                    ${socialLinksHTML}
-                    
-                    ${audioPlayersHTML}
-                    
-                    ${pressKitHTML}
-
-                    ${adTriggerButton}
-                    
-                    ${devAd}
-                </div>
-                
-                <!-- Modal de Anuncios -->
-                ${cardData.adsCode ? `
-                <div id="adModal" class="ad-modal" onclick="closeAdModalOnBackdrop(event)">
-                    <div class="ad-modal-content">
-                        <div class="ad-modal-header">
-                            <h3>💰 Mensaje Patrocinado</h3>
-                            <button class="ad-modal-close" onclick="closeAdModal()">&times;</button>
-                        </div>
-                        <div class="ad-modal-body">
-                            ${/* SECURITY NOTE: adsCode se inserta sin sanitizar para permitir scripts publicitarios.
-                               Esto es intencional pero permite XSS. Solo usar con códigos de plataformas confiables. */
-                             cardData.adsCode}
-                        </div>
-                        <div class="ad-modal-footer">
-                            Apoya al artista viendo este anuncio ❤️
-                        </div>
-                    </div>
-                </div>
-                ` : ''}
-            `;
-
-            // Solo asignar currentAudio si es un reproductor HTML5 nativo
-            currentAudio = document.getElementById('audioPlayer');
-            
-            // Abrir modal automáticamente después de 3 segundos (opcional)
-            if (cardData.adsCode) {
-                setTimeout(() => {
-                    openAdModal();
-                }, 3000);
-            }
-        }
-
-        function generateAudioPlayer(url) {
-            // Spotify
-            if (url.includes('spotify.com')) {
-                const trackId = extractSpotifyId(url);
-                return `
-                    <iframe style="border-radius:12px; margin-bottom: 20px; max-width: 100%;" 
-                        src="https://open.spotify.com/embed/track/${trackId}" 
-                        width="100%" height="152" frameBorder="0" 
-                        allowfullscreen="" 
-                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
-                        loading="lazy">
-                    </iframe>
-                `;
-            }
-            
-            // SoundCloud
-            if (url.includes('soundcloud.com')) {
-                return `
-                    <iframe width="100%" height="166" scrolling="no" frameborder="no" 
-                        allow="autoplay" style="max-width: 100%;"
-                        src="https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&color=%23ff5500&auto_play=false&hide_related=false&show_comments=false&show_user=true&show_reposts=false&show_teaser=true">
-                    </iframe>
-                `;
-            }
-            
-            // YouTube
-            if (url.includes('youtube.com') || url.includes('youtu.be')) {
-                const videoId = extractYouTubeId(url);
-                return `
-                    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; margin-bottom: 20px;">
-                        <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 12px;"
-                            src="https://www.youtube.com/embed/${videoId}" 
-                            frameborder="0" 
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                            allowfullscreen>
-                        </iframe>
-                    </div>
-                `;
-            }
-            
-            // Archivo MP3 directo (con controles nativos)
-            return `
-                <audio id="audioPlayer" src="${url}" preload="metadata" controls style="width: 100%; max-width: 100%; margin-bottom: 20px; border-radius: 8px;" onerror="this.parentElement.innerHTML='<div style=\\'color:red; padding:10px; text-align:center;\\'>⚠️ Error al cargar el audio. Verifica que la URL sea correcta.</div>'">
-                    Tu navegador no soporta el elemento de audio.
-                </audio>
-            `;
-        }
-
-        function generateVideoPlayer(url) {
-            // YouTube
-            if (url.includes('youtube.com') || url.includes('youtu.be')) {
-                const videoId = extractYouTubeId(url);
-                return `
-                    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; border-radius: 12px;">
-                        <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 12px;"
-                            src="https://www.youtube.com/embed/${videoId}" 
-                            frameborder="0" 
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                            allowfullscreen>
-                        </iframe>
-                    </div>
-                `;
-            }
-            
-            // Vimeo
-            if (url.includes('vimeo.com')) {
-                const vimeoId = url.split('/').pop().split('?')[0];
-                return `
-                    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; border-radius: 12px;">
-                        <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 12px;"
-                            src="https://player.vimeo.com/video/${vimeoId}" 
-                            frameborder="0" 
-                            allow="autoplay; fullscreen; picture-in-picture" 
-                            allowfullscreen>
-                        </iframe>
-                    </div>
-                `;
-            }
-            
-            // Video MP4 directo
-            return `
-                <video src="${escapeHtml(url)}" controls style="width: 100%; max-width: 100%; border-radius: 12px;" 
-                    onerror="this.parentElement.innerHTML='<div style=\\'color:red; padding:10px; text-align:center;\\'>⚠️ Error al cargar el video.</div>'">
-                    Tu navegador no soporta el elemento de video.
-                </video>
-            `;
-        }
-
-        function extractSpotifyId(url) {
-            // Extraer ID de Spotify de URLs como:
-            // https://open.spotify.com/track/XXXXX
-            // https://open.spotify.com/intl-es/track/XXXXX
-            const match = url.match(/track\/([a-zA-Z0-9]+)/);
-            return match ? match[1] : '';
-        }
-
-        function extractYouTubeId(url) {
-            // Extraer ID de YouTube de URLs como:
-            // https://www.youtube.com/watch?v=XXXXX
-            // https://youtu.be/XXXXX
-            let videoId = '';
-            if (url.includes('youtu.be/')) {
-                videoId = url.split('youtu.be/')[1].split('?')[0];
-            } else if (url.includes('youtube.com/watch')) {
-                const urlParams = new URLSearchParams(new URL(url).search);
-                videoId = urlParams.get('v');
-            }
-            return videoId || '';
-        }
-
-        function generateQR() {
-            const url = generateCardUrl();
-            const qrContainer = document.getElementById('qrcode');
-            qrContainer.innerHTML = ''; // Limpiar QR anterior
-            
-            try {
-                new QRCode(qrContainer, {
-                    text: url,
-                    width: 300,
-                    height: 300,
-                    colorDark: '#000000',
-                    colorLight: '#ffffff',
-                    correctLevel: QRCode.CorrectLevel.H
-                });
-                console.log('QR generado exitosamente'); // Debug
-            } catch (error) {
-                console.error('Error al generar QR:', error);
-                qrContainer.innerHTML = '<p style="color: red;">Error al generar QR: ' + error.message + '</p>';
-            }
-        }
-
-        function generateCardUrl() {
-            // Generar ID único para esta tarjeta
-            const cardId = Date.now().toString(36) + Math.random().toString(36).substr(2);
-            
-            // Crear objeto compacto con todos los datos
-            const compactData = {
-                id: cardId,
-                s: cardData.songName,
-                a: cardData.artist,
-                d: cardData.description || '',
-                au: cardData.audioUrls || [], // Array de URLs de audio
-                pi: cardData.profileImage || '',
-                fb: cardData.facebook || '',
-                tw: cardData.twitter || '',
-                ig: cardData.instagram || '',
-                tk: cardData.tiktok || '',
-                yt: cardData.youtube || '',
-                // Press Kit
-                bio: cardData.bioExtended || '',
-                gen: cardData.genre || '',
-                loc: cardData.location || '',
-                cem: cardData.contactEmail || '',
-                mgr: cardData.manager || '',
-                tel: cardData.contactPhone || '',
-                awd: cardData.awards || '',
-                st: cardData.stats || '',
-                prl: cardData.pressLinks || '',
-                pph: cardData.promoPhotos || '',
-                pvid: cardData.promoVideo || '',
-                web: cardData.website || ''
-            };
-            
-            // Codificar en Base64 para URLs más cortas
-            const jsonStr = JSON.stringify(compactData);
-            const base64Data = btoa(encodeURIComponent(jsonStr));
-            
-            const url = window.location.href.split('?')[0] + '?view=card&data=' + base64Data;
-            
-            // Advertencia si la URL es muy larga (navegadores tienen límites ~2000 caracteres)
-            if (url.length > 2000) {
-                console.warn('⚠️ La URL generada es muy larga (' + url.length + ' caracteres). Considera reducir la cantidad de información en el Press Kit.');
-            }
-            
-            return url;
-        }
-
-        function getEmbedCode() {
-            // Generar el reproductor apropiado para el código embebido
-            let audioPlayerCode = '';
-            
-            if (cardData.audioUrl.includes('spotify.com')) {
-                const trackId = extractSpotifyId(cardData.audioUrl);
-                audioPlayerCode = `<iframe style="border-radius:12px; margin-bottom: 20px;" src="https://open.spotify.com/embed/track/${trackId}" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>`;
-            } else if (cardData.audioUrl.includes('soundcloud.com')) {
-                audioPlayerCode = `<iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=${encodeURIComponent(cardData.audioUrl)}&color=%23ff5500&auto_play=false"></iframe>`;
-            } else if (cardData.audioUrl.includes('youtube.com') || cardData.audioUrl.includes('youtu.be')) {
-                const videoId = extractYouTubeId(cardData.audioUrl);
-                audioPlayerCode = `<iframe width="100%" height="200" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius: 12px; margin-bottom: 20px;"></iframe>`;
-            } else {
-                audioPlayerCode = `<audio src="${cardData.audioUrl}" controls style="width: 100%; margin-bottom: 20px; border-radius: 8px;"></audio>`;
-            }
-            
-            // Publicidad del desarrollador (solo si no está oculta)
-            const devAdCode = HIDE_DEVELOPER_AD ? '' : `
-        <div style="background: rgba(0,0,0,0.1); border-radius: 8px; padding: 10px; margin-top: 15px; text-align: center; font-size: 0.85em; border: 1px solid rgba(255,255,255,0.2);">
-            ${DEVELOPER_AD_CODE}
-        </div>`;
-
-            // Botón para abrir modal de anuncios
-            const adTriggerButton = cardData.adsCode ? `
-        <button onclick="openAdModal()" style="background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); color: #333; border: none; padding: 12px 25px; border-radius: 25px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 15px; width: 100%; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);">
-            💰 Ver Mensaje Patrocinado
-        </button>` : '';
-
-            // Modal de anuncios
-            const adModalCode = cardData.adsCode ? `
-        <div id="adModal" style="display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); backdrop-filter: blur(10px); align-items: center; justify-content: center;" onclick="closeAdModalOnBackdrop(event)">
-            <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 30px; border-radius: 20px; max-width: 500px; width: 90%; position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.5); color: white;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid rgba(255,255,255,0.3);">
-                    <h3 style="margin: 0; font-size: 1.5em;">💰 Mensaje Patrocinado</h3>
-                    <button onclick="closeAdModal()" style="background: rgba(255,255,255,0.2); border: none; color: white; font-size: 28px; cursor: pointer; width: 40px; height: 40px; border-radius: 50%; padding: 0;">&times;</button>
-                </div>
-                <div style="background: rgba(255,255,255,0.15); border-radius: 12px; padding: 20px; min-height: 150px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; backdrop-filter: blur(5px);">
-                    ${cardData.adsCode}
-                </div>
-                <div style="text-align: center; font-size: 0.9em; opacity: 0.8;">
-                    Apoya al artista viendo este anuncio ❤️
-                </div>
-            </div>
-        </div>` : '';
-
-            const viewCounterCode = `
-        <div style="background: rgba(255,255,255,0.2); padding: 10px 15px; border-radius: 8px; text-align: center; margin-top: 10px; font-size: 0.9em;">
-            👁️ Vistas: <strong id="embedViewCount" style="font-size: 1.2em; color: #FFD700;">0</strong>
-        </div>
-        <script>
-            const cardId = new URLSearchParams(window.location.search).get('id') || 'preview';
-            const key = 'views_' + cardId;
-            let views = parseInt(localStorage.getItem(key) || '0') + 1;
-            localStorage.setItem(key, views);
-            document.getElementById('embedViewCount').textContent = views;
-            
-            function openAdModal() {
-                const modal = document.getElementById('adModal');
-                if (modal) {
-                    modal.style.display = 'flex';
-                    document.body.style.overflow = 'hidden';
-                }
-            }
-            
-            function closeAdModal() {
-                const modal = document.getElementById('adModal');
-                if (modal) {
-                    modal.style.display = 'none';
-                    document.body.style.overflow = '';
-                }
-            }
-            
-            function closeAdModalOnBackdrop(event) {
-                if (event.target.id === 'adModal') {
-                    closeAdModal();
-                }
-            }
-            
-            ${cardData.adsCode ? `
-            // Abrir modal automáticamente después de 3 segundos
-            setTimeout(() => {
-                openAdModal();
-            }, 3000);` : ''}
-        <\/script>`;
-            
-            return `<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${escapeHtml(cardData.songName)} - ${escapeHtml(cardData.artist)}</title>
-    <style>
-        body { margin: 0; padding: 20px; font-family: Arial, sans-serif; background: #f5f5f5; }
-        .music-card { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 15px; padding: 25px; color: white; max-width: 500px; margin: 0 auto; }
-        h2 { margin: 0 0 10px 0; font-size: 1.8em; }
-        .artist { opacity: 0.9; margin-bottom: 15px; font-size: 1.1em; }
-        .description { margin-bottom: 20px; line-height: 1.5; }
-    </style>
-</head>
-<body>
-    <div class="music-card">
-        <h2>${escapeHtml(cardData.songName)}</h2>
-        <div class="artist">Por ${escapeHtml(cardData.artist)}</div>
-        ${cardData.description ? `<div class="description">${escapeHtml(cardData.description)}</div>` : ''}
-        
-        ${audioPlayerCode}
-
-        ${adTriggerButton}
-        
-        ${devAdCode}
-        ${viewCounterCode}
-    </div>
-    ${adModalCode}
-</body>
-</html>`;
-        }
-
-        function copyEmbedCode() {
-            const code = getEmbedCode();
-            navigator.clipboard.writeText(code).then(() => {
-                showSuccess();
-            });
-        }
-
-        function downloadQR() {
-            const canvas = document.querySelector('#qrcode canvas');
-            const img = document.querySelector('#qrcode img');
-            
-            if (canvas) {
-                const link = document.createElement('a');
-                link.download = `${cardData.songName}-QR.png`;
-                link.href = canvas.toDataURL();
-                link.click();
-            } else if (img) {
-                const link = document.createElement('a');
-                link.download = `${cardData.songName}-QR.png`;
-                link.href = img.src;
-                link.click();
-            } else {
-                alert('No se pudo encontrar el código QR para descargar');
-            }
-        }
-
-        function reset() {
-            document.getElementById('formSection').classList.remove('hidden');
-            document.getElementById('previewSection').classList.add('hidden');
-            document.getElementById('songForm').reset();
-            if (currentAudio) {
-                currentAudio.pause();
-                currentAudio = null;
-            }
-        }
-
-        function escapeHtml(text) {
-            const map = {
-                '&': '&amp;',
-                '<': '&lt;',
-                '>': '&gt;',
-                '"': '&quot;',
-                "'": '&#039;'
-            };
-            return text.replace(/[&<>"']/g, m => map[m]);
-        }
-
-        // Funciones para manejar múltiples enlaces de audio
-        function addAudioLink() {
-            const container = document.getElementById('audioLinksContainer');
-            const newItem = document.createElement('div');
-            newItem.className = 'audio-link-item';
-            newItem.style.cssText = 'display: flex; gap: 10px; margin-bottom: 10px; align-items: center;';
-            newItem.innerHTML = `
-                <input type="url" class="audioUrl" placeholder="https://open.spotify.com/track/... o https://soundcloud.com/..." style="flex: 1;">
-                <button type="button" class="remove-audio-btn" onclick="removeAudioLink(this)" style="background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 18px;" title="Eliminar">✖️</button>
-            `;
-            container.appendChild(newItem);
-            updateRemoveButtons();
-        }
-
-        function removeAudioLink(button) {
-            const item = button.closest('.audio-link-item');
-            item.remove();
-            updateRemoveButtons();
-        }
-
-        function updateRemoveButtons() {
-            const items = document.querySelectorAll('.audio-link-item');
-            items.forEach((item, index) => {
-                const removeBtn = item.querySelector('.remove-audio-btn');
-                if (items.length > 1) {
-                    removeBtn.style.display = 'block';
-                } else {
-                    removeBtn.style.display = 'none';
-                }
-            });
-        }
-
-        function getAudioUrls() {
-            const inputs = document.querySelectorAll('.audioUrl');
-            const urls = [];
-            inputs.forEach(input => {
-                if (input.value.trim()) {
-                    urls.push(input.value.trim());
-                }
-            });
-            return urls;
-        }
-
-        function showSuccess() {
-            const msg = document.getElementById('successMessage');
-            msg.classList.remove('hidden');
-            setTimeout(() => msg.classList.add('hidden'), 3000);
-        }
-
-        // Cargar tarjeta desde URL si viene de un QR
-        window.addEventListener('DOMContentLoaded', () => {
-            const params = new URLSearchParams(window.location.search);
-            if (params.get('view') === 'card') {
-                // Intentar cargar desde formato nuevo (Base64)
-                const base64Data = params.get('data');
-                
-                if (base64Data) {
-                    try {
-                        const jsonStr = decodeURIComponent(atob(base64Data));
-                        const data = JSON.parse(jsonStr);
-                        
-                        cardData = {
-                            songName: data.s || 'Sin título',
-                            artist: data.a || 'Artista desconocido',
-                            description: data.d || '',
-                            audioUrls: data.au || [],
-                            adsCode: '',
-                            profileImage: data.pi || '',
-                            facebook: data.fb || '',
-                            twitter: data.tw || '',
-                            instagram: data.ig || '',
-                            tiktok: data.tk || '',
-                            youtube: data.yt || '',
-                            // Press Kit
-                            bioExtended: data.bio || '',
-                            genre: data.gen || '',
-                            location: data.loc || '',
-                            contactEmail: data.cem || '',
-                            manager: data.mgr || '',
-                            contactPhone: data.tel || '',
-                            awards: data.awd || '',
-                            stats: data.st || '',
-                            pressLinks: data.prl || '',
-                            promoPhotos: data.pph || '',
-                            promoVideo: data.pvid || '',
-                            website: data.web || ''
-                        };
-                    } catch (error) {
-                        console.error('Error al decodificar datos de la tarjeta:', error);
-                        cardData = {
-                            songName: 'Error al cargar',
-                            artist: 'Desconocido',
-                            description: '',
-                            audioUrls: [],
-                            adsCode: '',
-                            profileImage: '',
-                            facebook: '',
-                            twitter: '',
-                            instagram: '',
-                            tiktok: '',
-                            youtube: '',
-                            bioExtended: '',
-                            genre: '',
-                            location: '',
-                            contactEmail: '',
-                            manager: '',
-                            contactPhone: '',
-                            awards: '',
-                            stats: '',
-                            pressLinks: '',
-                            promoPhotos: '',
-                            promoVideo: '',
-                            website: ''
-                        };
-                    }
-                } else {
-                    // Formato antiguo (para compatibilidad)
-                    cardData = {
-                        songName: params.get('s') || 'Sin título',
-                        artist: params.get('a') || 'Artista desconocido',
-                        description: params.get('d') || '',
-                        audioUrls: params.get('u') ? [params.get('u')] : [],
-                        adsCode: '',
-                        profileImage: params.get('pi') || '',
-                        facebook: params.get('fb') || '',
-                        twitter: params.get('tw') || '',
-                        instagram: params.get('ig') || '',
-                        tiktok: params.get('tk') || '',
-                        youtube: params.get('yt') || '',
-                        bioExtended: '',
-                        genre: '',
-                        location: '',
-                        contactEmail: '',
-                        manager: '',
-                        contactPhone: '',
-                        awards: '',
-                        stats: '',
-                        pressLinks: '',
-                        promoPhotos: '',
-                        promoVideo: '',
-                        website: ''
-                    };
-                }
-                
-                // Ocultar formulario y mostrar tarjeta
-                document.getElementById('formSection').classList.add('hidden');
-                document.getElementById('previewSection').classList.remove('hidden');
-                
-                // Mostrar QR para que otros también puedan compartir
-                document.querySelector('.qr-container').style.display = 'block';
-                
-                // Cambiar texto del botón "Crear Nueva" a "Crear Mi Propia Tarjeta"
-                const resetButtons = document.querySelectorAll('button[onclick="reset()"]');
-                resetButtons.forEach(btn => {
-                    btn.innerHTML = '🎵 Crear Mi Propia Tarjeta';
-                });
-                
-                // Generar la tarjeta
-                generateCard();
-                
-                // Generar QR para que el usuario pueda compartir también
-                generateQR();
-                
-                // Incrementar contador de vistas
-                incrementViewCount();
-            }
-        });
-    </script>
-
-    <!-- Modal Global de Anuncios (se muestra en todas las pestañas) -->
-    <div id="globalAdModal" class="ad-modal" onclick="closeAdModalOnBackdrop(event)">
-        <div class="ad-modal-content">
-            <div class="ad-modal-header">
-                <h3>💰 Mensaje Patrocinado</h3>
-                <button class="ad-modal-close" onclick="closeGlobalAdModal()">&times;</button>
-            </div>
-            <div class="ad-modal-body">
-                <!-- Anuncio A-Ads del desarrollador -->
-                <iframe data-aa='2416691' src='//acceptable.a-ads.com/2416691/?size=Adaptive'
-                    style='border:0; padding:0; width:100%; max-width:468px; height:auto; min-height:60px; overflow:hidden; background-color: transparent; display: block; margin: 0 auto;'></iframe>
-            </div>
-            <div class="ad-modal-footer">
-                Apoya este proyecto viendo este anuncio ❤️
-            </div>
-        </div>
-    </div>
-
-    <!-- Footer de Copyright -->
-    <footer style="text-align: center; padding: 30px 20px; margin-top: 50px; background: rgba(0,0,0,0.1); border-top: 1px solid rgba(255,255,255,0.1);">
-        <p style="color: white; font-size: 0.9em; margin: 5px 0;">
-            © 2025 <strong>Regalías Directas</strong> - Todos los derechos reservados
-        </p>
-        <p style="color: rgba(255,255,255,0.7); font-size: 0.8em; margin: 5px 0;">
-            Creado por <a href="https://github.com/OMM2022" target="_blank" style="color: #667eea; text-decoration: none;">OMM2022</a>
-        </p>
-        <p style="color: rgba(255,255,255,0.6); font-size: 0.75em; margin: 10px 0 0 0;">
-            ⚖️ Este código está protegido por copyright. Ver <a href="https://github.com/OMM2022/regalias-artisticas/blob/main/LICENSE" target="_blank" style="color: #667eea; text-decoration: none;">LICENSE</a> para términos de uso.
-        </p>
-    </footer>
-
-    <!-- Popunder Adsterra - Se activa con interacción del usuario -->
-    <script type='text/javascript' src='//pl28021413.effectivegatecpm.com/1d/10/e5/1d10e55a751f630794821f867ea7fd84.js'></script>
 
 </body>
 </html>
