@@ -1117,7 +1117,7 @@
             
             // Archivo MP3 directo (con controles nativos)
             return `
-                <audio id="audioPlayer" src="${url}" preload="metadata" controls style="width: 100%; max-width: 100%; margin-bottom: 20px; border-radius: 8px;" onerror="this.parentElement.innerHTML='<div style=\\'color:red; padding:10px; text-align:center;\\'>⚠️ Error al cargar el audio. Verifica que la URL sea correcta.</div>'">
+                <audio id="audioPlayer" src="${url}" preload="metadata" controls style="width: 100%; max-width: 100%; margin-bottom: 20px; border-radius: 8px;" onerror="this.parentElement.innerHTML='<div style=&quot;color:red; padding:10px; text-align:center;&quot;>⚠️ Error al cargar el audio. Verifica que la URL sea correcta.</div>'">
                     Tu navegador no soporta el elemento de audio.
                 </audio>
             `;
@@ -1157,7 +1157,7 @@
             // Video MP4 directo
             return `
                 <video src="${escapeHtml(url)}" controls style="width: 100%; max-width: 100%; border-radius: 12px;" 
-                    onerror="this.parentElement.innerHTML='<div style=\\'color:red; padding:10px; text-align:center;\\'>⚠️ Error al cargar el video.</div>'">
+                    onerror="this.parentElement.innerHTML='<div style=&quot;color:red; padding:10px; text-align:center;&quot;>⚠️ Error al cargar el video.</div>'">
                     Tu navegador no soporta el elemento de video.
                 </video>
             `;
