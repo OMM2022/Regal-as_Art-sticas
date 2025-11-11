@@ -254,8 +254,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
             try {
                 generateCard();
-                generateQR();
-                generateCardUrl();
+                generateCardUrl(); // Primero generar URL
+                generateQR();      // Luego generar QR con la URL
                 
                 document.getElementById('formSection').classList.add('hidden');
                 document.getElementById('cardResult').classList.remove('hidden');
