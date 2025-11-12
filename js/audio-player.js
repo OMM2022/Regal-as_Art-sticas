@@ -4,7 +4,8 @@
  */
 
 function extractSpotifyId(url) {
-    const match = url.match(/spotify\.com\/(track|album|playlist)\/([a-zA-Z0-9]+)/);
+    // Soporta URLs con y sin /intl-XX/
+    const match = url.match(/spotify\.com\/(?:intl-[a-z]{2}\/)?(track|album|playlist)\/([a-zA-Z0-9]+)/);
     return match ? { type: match[1], id: match[2] } : null;
 }
 
