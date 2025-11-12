@@ -3,6 +3,9 @@
  * Manejo del formulario, generación de tarjetas y URLs
  */
 
+// Variable global para almacenar los datos de la tarjeta
+let cardData = null;
+
 function generateCard() {
     const preview = document.getElementById('musicCardPreview');
     
